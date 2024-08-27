@@ -1,11 +1,13 @@
 
-from PyQt5.QtWidgets import QMainWindow, QAction, QShortcut,QMenu
-from PyQt5.QtCore import Qt
-from view.gui_layout import App_MainWindow
-from view.config import DEFAULT_MUSIC_DIR
+from src.view.gui_layout import App_MainWindow
+from src.view.gui_custom_widget import QCustomQWidget
+from src.view.config import DEFAULT_MUSIC_DIR, BACKGROUND_COVER_IMG_SMALL
+from src.utils.song import Song
 from PyQt5.QtWidgets import  QFileDialog ,QListWidgetItem
-from view.gui_custom_widget import QCustomQWidget
-from PyQt5.QtGui import QPixmap, QKeySequence
+from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtCore import Qt, QByteArray, QBuffer, QIODevice
+from PyQt5.QtGui import QPixmap, QColor
+
 
 import logging
 logger = logging.getLogger(__name__)
@@ -55,7 +57,7 @@ class View(QMainWindow):
         self.close()
 
 
-    def load_song(self):
+    def get_path_mp3(self):
         """ 
         Carga una fichero de musica a la aplicacion. 
         Crea un objeto de tipo Song y lo añade a la lista interna.
@@ -67,7 +69,115 @@ class View(QMainWindow):
         return path
     
 
-    def  display_item_song(self,song):    
+    def show_component_form(self):
+        """
+        Displays the component form by showing the save form button, form layout content, 
+        cover image content, and setting the style sheet for the container on the right.
+        """
+        self.ui.qfr_btn_save_form.show()
+        self.ui.qfr_formLayout_content.show()
+        self.ui.qfr_coverimage_content.show()
+        self.ui.contenedor_derecho.setStyleSheet("background-color: rgb(255, 255, 255);") 
+
+    def hide_form_component(self):
+        """
+        Hides the form component by hiding the save form button, form layout content, 
+        cover image content, and setting the style sheet for the container on the right.
+        """
+        self.ui.qfr_btn_save_form.hide()
+        self.ui.qfr_formLayout_content.hide()
+        self.ui.qfr_coverimage_content.hide()
+        #self.ui.contenedor_derecho.hide()
+        self.ui.contenedor_derecho.setStyleSheet("background-color: rgb(234, 234, 234);") 
+        
+        
+
+    def clean_form_metatada(self):
+        """
+        Cleans the metadata form by setting all text fields to an empty string and
+        resetting the cover image to a white background.
+        """
+
+        self.ui.titleLineEdit.setText("")
+        self.ui.artistLineEdit.setText("")
+        self.ui.albumLineEdit.setText("")
+        self.ui.genreLineEdit.setText("")
+        self.ui.yearLineEdit.setText("")
+        self.ui.timeLineEdit.setText("")
+        self.ui.trackLineEdit.setText("")
+        self.ui.videoLinkLineEdit.setText("")
+        self.ui.pathLinkLineEdit.setText("") 
+
+        pixmap = QPixmap(134,134)
+        pixmap.fill(QColor("white"))  # Establece la imagen en blanco
+        self.ui.lbl_cover_image.setPixmap(pixmap)
+    
+    
+    def fill_form_metadata(self, song:Song):
+        """
+    	Fills the metadata form with information from a given Song object.
+
+    	Parameters:
+    	song (Song): The Song object containing the metadata to fill the form with.
+    	"""
+        
+        self.ui.titleLineEdit.setText(song.title)
+        self.ui.artistLineEdit.setText(song.artist)
+        self.ui.albumLineEdit.setText(song.album)
+        self.ui.genreLineEdit.setText(song.genre)
+        self.ui.yearLineEdit.setText(song.release_date)
+        self.ui.timeLineEdit.setText(song.duration)
+        self.ui.trackLineEdit.setText(song.track_num)
+        self.ui.videoLinkLineEdit.setText(song.path_mp4)
+        self.ui.pathLinkLineEdit.setText(song.path_mp3) 
+
+        if song.coverImage:
+            pixmap = QPixmap()
+            pixmap.loadFromData(song.coverImage)
+            self.ui.lbl_cover_image.setPixmap(pixmap)
+            
+
+    def edit_cover_image(self):
+        """
+        Edits the cover image of the song by opening a file dialog for the user to select a new image.
+        """
+        imagePath, _ = QFileDialog.getOpenFileName(self, "Open Image", "./assets/images")
+        if imagePath: # si es la imagen es valida
+            pixmap = QPixmap(imagePath)
+            self.ui.lbl_cover_image.setPixmap(pixmap) # la muestro en el componente.
+        
+    def get_form_metadata(self)-> Song:
+        """
+    	Retrieves the metadata from the form fields and returns a new Song object.
+
+    	Returns:
+    	Song: A new Song object containing the metadata from the form fields.
+    	"""
+
+        new_title = self.ui.titleLineEdit.text()
+        new_artist = self.ui.artistLineEdit.text()
+        new_album =  self.ui.albumLineEdit.text()
+        new_genre =  self.ui.genreLineEdit.text()
+        new_release_date =  self.ui.yearLineEdit.text()
+        new_time =  self.ui.timeLineEdit.text()
+        new_track =  self.ui.trackLineEdit.text()
+        path_mp4 =  self.ui.videoLinkLineEdit.text()
+        path_mp3 = self.ui.pathLinkLineEdit.text()
+
+        # get QPixmap from QLabel
+        pixmap = self.ui.lbl_cover_image.pixmap()
+        # convert QPixmap to bytes
+        ba = QByteArray()
+        buff = QBuffer(ba)
+        buff.open(QIODevice.WriteOnly) 
+        ok = pixmap.save(buff, "PNG")
+        assert ok
+        new_coverImage = ba.data()
+
+        return Song(new_title, new_artist, new_album, new_genre,new_release_date, new_time,new_track, new_coverImage,path_mp3, path_mp4)
+
+
+    def add_song(self,updated_song:Song):    
         """
         Display a song item in the custom list widget.
 
@@ -80,13 +190,14 @@ class View(QMainWindow):
         """
         # Create QCustomQWidget (Elementos de la lista custom)
         item = QCustomQWidget() #pos, lista de widges
-        item.setCoverImg(song.coverImage)
-        item.setTitle(song.title)
-        item.setArtist(song.artist)
-        item.setAlbum(song.album)
-        item.setGenre(song.genre)
-        item.setDuration(song.duration)
-        item.btn_menu.setMenu(item.crear_menu(self.remove_item, self.edit_item, self.add_item_to_playlist))
+        item.setCoverImg(updated_song.coverImage)
+        item.setTitle(updated_song.title)
+        item.setArtist(updated_song.artist)
+        item.setAlbum(updated_song.album)
+        item.setGenre(updated_song.genre)
+        item.setDuration(updated_song.duration)
+        item.btn_menu.setMenu(item.crear_menu(self.remove_item))
+        #item.btn_menu.setMenu(item.crear_menu(self.remove_item, self.edit_item, self.add_item_to_playlist))
         item.btn_menu.clicked.connect(item.open_menu)
       
         # Create QListWidgetItem (Elemento de la lista que contiene el elemento custom)
@@ -98,36 +209,13 @@ class View(QMainWindow):
         self.ui.list_songs.addItem(box_item)
         self.ui.list_songs.setItemWidget(box_item, item)
 
-    def add_item_to_playlist(self):
-        pass
-
-    def edit_item(self):
-        """
-        Edits an item in the list of songs.
-
-        Retrieves the currently selected song from the list and populates the 
-        corresponding text fields with the song's details.
-        """
-        pos = self.ui.list_songs.currentRow()
-        if pos >= 0:
-           song = self.songs[pos]
-           self.ui.titleLineEdit.setText(song.title)
-           self.ui.artistLineEdit.setText(song.artist)
-           self.ui.albumLineEdit.setText(song.album)
-           self.ui.genreLineEdit.setText(song.genre)
-           self.ui.yearLineEdit.setText(song.release_date)
-           self.ui.timeLineEdit.setText(song.duration)
-           self.ui.trackLineEdit.setText(song.track_num)
-           self.ui.videoLinkLineEdit.setText(song.url)
-           self.ui.pathLinkLineEdit.setText(song.path)
 
     def remove_item(self):
         """
         Removes the currently selected item from the list of songs.
-
-        This function retrieves the current row index of the selected item in the list of songs. 
-        If the index is greater than or equal to 0, it removes the corresponding item widget from the list and updates the list widget.
         """
         pos = self.ui.list_songs.currentRow()
         if pos >= 0:
-            self.ui.list_songs.removeItemWidget(self.ui.list_songs.takeItem(pos))   
+            # Borrar el item de la lista de pyq5
+            box_item = self.ui.list_songs.takeItem(pos)
+            self.ui.list_songs.removeItemWidget(box_item)   

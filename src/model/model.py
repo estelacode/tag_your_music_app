@@ -1,31 +1,37 @@
-from pathlib import Path
+
 import eyed3
 from time import gmtime
 from time import strftime
-from model.song import Song
+from src.utils.song import Song
+import logging
+logger = logging.getLogger(__name__)
+
+
 class Model:
     
     def __init__(self):
         pass        
-        
-    def load_metadata(self,path:str):
-        """
-    	Loads the metadata of an audio file identified by the given path.
-    
-    	Parameters:
-    	path (str): The path to the audio file.
-    
-    	Returns:
-    	eyed3.core.AudioFile: A concrete type of AudioFile containing the metadata of the audio file.
-    	"""
-        audiofile = eyed3.load(path)    
 
-        if audiofile.tag is None:
-            audiofile.tag = eyed3.id3.Tag()
+
+    def get_metadata(self, path_mp3)->Song:
+        """
+        Retrieves metadata from an MP3 file.
+
+        Parameters:
+            path_mp3 (str): The path to the MP3 file.
+
+        Returns:
+            Song: An object containing the metadata of the MP3 file.
+        """
         
-        return audiofile
-    
-    def mapperToSong(self, audiofile, path):
+        try:
+            audiofile = eyed3.load(path_mp3)
+        except Exception as e:
+            logger.debug(f'Error:{e}')
+        
+        if audiofile.tag is None:
+            audiofile.tag = eyed3.id3.Tag() 
+        
         title = ""
         album = ""
         artist = ""
@@ -57,6 +63,26 @@ class Model:
         for image in images:
             coverImage = image.image_data
 
+       
         # Crear objeto song con dichas variables.
-        return Song(title, artist, album, genre,release_date, duration,track_num, coverImage,path,"")
+        return Song(title, artist, album, genre,release_date, duration,track_num, coverImage,path_mp3)
 
+    def update_metadata(self, new_song:Song):
+        # carga el fichero mp3
+        audiofile = eyed3.load(new_song.path_mp3) 
+        
+        if audiofile.tag is None: # si el audifile tiene la tag a None
+            audiofile.tag = eyed3.id3.Tag() # se le inicializa la tag
+        audiofile.tag.title = new_song.title  #le asigna nuevo title
+        audiofile.tag.artist = new_song.artist #le asigna nuevo artista
+        audiofile.tag.album = new_song.album #le asigna nuevo album
+        audiofile.tag.release_date = new_song.release_date  #le asigna release data
+        audiofile.tag.images.set(3, new_song.coverImage , "image/jpg" ,u"Cover") #le asigna nueva cover
+        audiofile.tag.genre = new_song.genre #le asigna nuevo genero
+        if new_song.track_num: 
+            audiofile.tag.track_num = new_song.track_num
+            
+        # update del fichero mp3
+        audiofile.tag.save() 
+      
+        

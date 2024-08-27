@@ -1,8 +1,10 @@
 import sys
 from PyQt5.QtWidgets import QApplication
-from view.view import View
-from model.model import Model
-from controller.controller import Controller
+#from view.view import View
+#from model.model import Model
+from src.view.view import View
+from src.model.model import Model
+from src.controller.controller import Controller
 import logging
 import sqlite3
 
@@ -20,16 +22,19 @@ logging.basicConfig(
 # Obtener un logger
 logger = logging.getLogger(__name__)
 
-#  Punto de entrada  de la app
-if __name__ == '__main__':
-    logger.info("Running my app")
-
-    # Conectar a la base de datos
-    db_connection = sqlite3.connect('tagyourmusic.db')
-
+def main(args = None):
     app = QApplication(sys.argv)
     modelo = Model()
     ventana =  View()
     controlador = Controller(ventana, modelo)
     ventana.show()
-    sys.exit(app.exec_())
+    app.exec_()
+
+
+#  Punto de entrada  de la app
+if __name__ == '__main__':
+    logger.info("Running my app")
+
+    # Conectar a la base de datos
+    #db_connection = sqlite3.connect('tagyourmusic.db')
+    sys.exit(main())

@@ -10,7 +10,7 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtMultimediaWidgets import QVideoWidget
-from view.config import (APP_MAIN_WIN_WITDH, 
+from src.view.config import (APP_MAIN_WIN_WITDH, 
                          APP_MAIN_WIN_HEIGHT,LOGO_APP, 
                          MINIMIZE_ICON, 
                          NORMAL_ICON, 
@@ -26,6 +26,250 @@ from view.config import (APP_MAIN_WIN_WITDH,
                          NEXT_ICON,
                          VOLUME_ICON)
 class App_MainWindow(object):
+    def _create_right_container(self):
+        """
+        Creates a metadata container for the application.
+
+        This function initializes and configures a QFormLayout to hold metadata fields.
+        It sets up the layout's margins, spacing, and adds a label and line edit for each metadata field.
+        The fields include title, artist, album, genre, year, time, track, video link, and path link.
+
+        Parameters:
+            None
+
+        Returns:
+            None
+        """
+        self.contenedor_derecho = QtWidgets.QFrame(self.qfr_body_rigth_content)
+        #self.contenedor_derecho.hide() # Oculto por defecto
+        self.contenedor_derecho.setStyleSheet("background-color: rgb(234, 234, 234);")
+        self.contenedor_derecho.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.contenedor_derecho.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.contenedor_derecho.setObjectName("qfr_display_right")
+        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.contenedor_derecho)
+        self.verticalLayout_9.setObjectName("verticalLayout_9")
+
+        # Qframe coverimage content--------------------------------------------
+        self.qfr_coverimage_content = QtWidgets.QFrame(self.contenedor_derecho)
+        self.qfr_coverimage_content.hide()
+        self.qfr_coverimage_content.setMaximumSize(QtCore.QSize(16777215, 200))
+        self.qfr_coverimage_content.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.qfr_coverimage_content.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.qfr_coverimage_content.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.qfr_coverimage_content.setObjectName("qfr_coverimage_content")
+        self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.qfr_coverimage_content)
+        self.verticalLayout_11.setObjectName("verticalLayout_11")
+        self.qvb_coverimagen = QtWidgets.QVBoxLayout()
+        self.qvb_coverimagen.setObjectName("qvb_coverimagen")
+        spacerItem3 = QtWidgets.QSpacerItem(20, 80, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.qvb_coverimagen.addItem(spacerItem3)
+        self.lbl_cover_image = QtWidgets.QLabel(self.qfr_coverimage_content)
+        self.lbl_cover_image.setMaximumSize(QtCore.QSize(130, 130))
+        self.lbl_cover_image.setAutoFillBackground(False)
+        self.lbl_cover_image.setStyleSheet("border : 1px solid #a6a6a6;")
+        self.lbl_cover_image.setText("")
+        self.lbl_cover_image.setPixmap(QtGui.QPixmap(BACKGROUND_COVER_IMG_SMALL))
+        self.lbl_cover_image.setScaledContents(True)
+        self.lbl_cover_image.setObjectName("lbl_cover_image")
+        self.qvb_coverimagen.addWidget(self.lbl_cover_image, 0, QtCore.Qt.AlignHCenter)
+        self.btn_edit_coverimage = QtWidgets.QPushButton(self.qfr_coverimage_content)
+        self.btn_edit_coverimage.setStyleSheet("QPushButton{\n"
+        "border:0px;\n"
+        "}\n"
+        "")
+        self.btn_edit_coverimage.setText("")
+        icon3 = QtGui.QIcon()
+        icon3.addPixmap(QtGui.QPixmap(EDIT_ICON), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        self.btn_edit_coverimage.setIcon(icon3)
+        self.btn_edit_coverimage.setIconSize(QtCore.QSize(25, 25))
+        self.btn_edit_coverimage.setObjectName("btn_edit_coverimage")
+        self.qvb_coverimagen.addWidget(self.btn_edit_coverimage)
+        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.qvb_coverimagen.addItem(spacerItem4)
+        self.verticalLayout_11.addLayout(self.qvb_coverimagen)
+        self.verticalLayout_9.addWidget(self.qfr_coverimage_content)
+        self.line = QtWidgets.QFrame(self.contenedor_derecho)
+        self.line.setMaximumSize(QtCore.QSize(250, 16777215))
+        self.line.setLineWidth(0)
+        self.line.setMidLineWidth(0)
+        self.line.setFrameShape(QtWidgets.QFrame.HLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
+        self.line.setObjectName("line")
+        self.verticalLayout_9.addWidget(self.line)
+
+        # Qframe form layout ----------------------------------------------------
+        self.qfr_formLayout_content = QtWidgets.QFrame(self.contenedor_derecho)
+        self.qfr_formLayout_content.hide()
+        self.qfr_formLayout_content.setMaximumSize(QtCore.QSize(16777215, 300))
+        self.qfr_formLayout_content.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.qfr_formLayout_content.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.qfr_formLayout_content.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.qfr_formLayout_content.setObjectName("qfr_formLayout_content")
+        self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.qfr_formLayout_content)
+        self.verticalLayout_12.setObjectName("verticalLayout_12")
+        
+        self.metadata_form = QtWidgets.QFormLayout()
+        self.metadata_form.setContentsMargins(5, -1, 15, -1)
+        self.metadata_form.setHorizontalSpacing(20)
+        self.metadata_form.setVerticalSpacing(10)
+        self.metadata_form.setObjectName("qfr_metadata_cotent")
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.metadata_form.setItem(0, QtWidgets.QFormLayout.FieldRole, spacerItem5)
+        self.lbl_metadata = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lbl_metadata.setFont(font)
+        self.lbl_metadata.setScaledContents(False)
+        self.lbl_metadata.setAlignment(QtCore.Qt.AlignCenter)
+        self.lbl_metadata.setObjectName("lbl_metadata")
+        self.metadata_form.setWidget(1, QtWidgets.QFormLayout.SpanningRole, self.lbl_metadata)
+        self.titleLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.titleLineEdit.setObjectName("titleLineEdit")
+        self.metadata_form.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.titleLineEdit)
+        self.artistLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.artistLabel.setFont(font)
+        self.artistLabel.setObjectName("artistLabel")
+        self.metadata_form.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.artistLabel)
+        self.artistLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.artistLineEdit.setObjectName("artistLineEdit")
+        self.metadata_form.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.artistLineEdit)
+        self.albumLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.albumLabel.setFont(font)
+        self.albumLabel.setObjectName("albumLabel")
+        self.metadata_form.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.albumLabel)
+        self.albumLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.albumLineEdit.setObjectName("albumLineEdit")
+        self.metadata_form.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.albumLineEdit)
+        self.genreLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.genreLabel.setFont(font)
+        self.genreLabel.setObjectName("genreLabel")
+        self.metadata_form.setWidget(5, QtWidgets.QFormLayout.LabelRole, self.genreLabel)
+        self.genreLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.genreLineEdit.setObjectName("genreLineEdit")
+        self.metadata_form.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.genreLineEdit)
+        self.yearLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.yearLabel.setFont(font)
+        self.yearLabel.setObjectName("yearLabel")
+        self.metadata_form.setWidget(6, QtWidgets.QFormLayout.LabelRole, self.yearLabel)
+        self.yearLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.yearLineEdit.setObjectName("yearLineEdit")
+        self.metadata_form.setWidget(6, QtWidgets.QFormLayout.FieldRole, self.yearLineEdit)
+        self.timeLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.timeLabel.setFont(font)
+        self.timeLabel.setObjectName("timeLabel")
+        self.metadata_form.setWidget(7, QtWidgets.QFormLayout.LabelRole, self.timeLabel)
+        self.timeLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.timeLineEdit.setObjectName("timeLineEdit")
+        self.metadata_form.setWidget(7, QtWidgets.QFormLayout.FieldRole, self.timeLineEdit)
+        self.trackLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.trackLabel.setFont(font)
+        self.trackLabel.setObjectName("trackLabel")
+        self.metadata_form.setWidget(8, QtWidgets.QFormLayout.LabelRole, self.trackLabel)
+        self.trackLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.trackLineEdit.setObjectName("trackLineEdit")
+        self.metadata_form.setWidget(8, QtWidgets.QFormLayout.FieldRole, self.trackLineEdit)
+
+        self.videoLinkLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.videoLinkLabel.setFont(font)
+        self.videoLinkLabel.setObjectName("videoLinkLabel")
+        self.metadata_form.setWidget(9, QtWidgets.QFormLayout.LabelRole, self.videoLinkLabel)
+        self.videoLinkLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.videoLinkLineEdit.setObjectName("videoLinkLineEdit")
+        self.metadata_form.setWidget(9, QtWidgets.QFormLayout.FieldRole, self.videoLinkLineEdit)
+        
+        self.pathLinkLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.pathLinkLabel.setFont(font)
+        self.pathLinkLabel.setObjectName("pathLinkLineEdit")
+        self.metadata_form.setWidget(10, QtWidgets.QFormLayout.LabelRole, self.pathLinkLabel)
+        self.pathLinkLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
+        self.pathLinkLineEdit.setReadOnly(True)
+        self.pathLinkLineEdit.setObjectName("pathLinkLineEdit")
+        self.metadata_form.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.pathLinkLineEdit)
+
+        spacerItem6 = QtWidgets.QSpacerItem(20, 70, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.metadata_form.setItem(11, QtWidgets.QFormLayout.LabelRole, spacerItem6)
+        self.titleLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        font.setBold(False)
+        font.setWeight(50)
+        self.titleLabel.setFont(font)
+        self.titleLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
+        self.titleLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
+        self.titleLabel.setObjectName("titleLabel")
+        self.metadata_form.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.titleLabel)
+        self.verticalLayout_12.addLayout(self.metadata_form)
+        self.verticalLayout_9.addWidget(self.qfr_formLayout_content)
+
+        # Qframe btn save form--------------------------------------------------------- 
+        self.qfr_btn_save_form = QtWidgets.QFrame(self.contenedor_derecho)
+        self.qfr_btn_save_form.hide() # Oculto por defecto
+        self.qfr_btn_save_form.setStyleSheet("background-color: rgb(255, 255, 255);")
+        self.qfr_btn_save_form.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        self.qfr_btn_save_form.setFrameShadow(QtWidgets.QFrame.Raised)
+        self.qfr_btn_save_form.setObjectName("qfr_btn_save_form")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.qfr_btn_save_form)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+         # Qframe btn save 
+        self.btn_save = QtWidgets.QPushButton(self.qfr_btn_save_form)
+        self.btn_save.setMaximumSize(QtCore.QSize(120, 35))
+        self.btn_save.setStyleSheet("QPushButton{\n"
+        "border: 2px dotted #b851ff;\n"
+        "border-radius: 15px;\n"
+        "color:#b851ff;\n"
+        "font-size: 12px;}\n"
+        "\n"
+        "QPushButton:Hover{\n"
+        "background-color: #b851ff; color:white;\n"
+        "border: none;}")
+        self.btn_save.setObjectName("btn_save")
+        self.horizontalLayout_8.addWidget(self.btn_save)
+
+        # Qframe btn cancel 
+        self.btn_cancel = QtWidgets.QPushButton(self.qfr_btn_save_form)
+        self.btn_cancel.setMaximumSize(QtCore.QSize(120, 35))
+        self.btn_cancel.setStyleSheet("QPushButton{\n"
+        "border: 2px dotted #b851ff;\n"
+        "border-radius: 15px;\n"
+        "color:#b851ff;\n"
+        "font-size: 12px;}\n"
+        "\n"
+        "QPushButton:Hover{\n"
+        "background-color: #b851ff; color:white;\n"
+        "border: none;}")
+        self.btn_cancel.setObjectName("btn_cancel")
+        self.horizontalLayout_8.addWidget(self.btn_cancel)
+
+        self.verticalLayout_9.addWidget(self.qfr_btn_save_form)
+
     def setup(self, App_MainWindow):
         App_MainWindow.setObjectName("App_MainWindow")
         App_MainWindow.resize(APP_MAIN_WIN_WITDH, APP_MAIN_WIN_HEIGHT)
@@ -111,6 +355,8 @@ class App_MainWindow(object):
         self.qfr_btns_window = QtWidgets.QHBoxLayout()
         self.qfr_btns_window.setSpacing(0)
         self.qfr_btns_window.setObjectName("qfr_btns_window")
+
+        # Btn Minimize
         self.btn_min = QtWidgets.QPushButton(self.qfr_content_window_menu)
         self.btn_min.setStyleSheet("border:0px;")
         self.btn_min.setText("")
@@ -121,6 +367,7 @@ class App_MainWindow(object):
         self.btn_min.setObjectName("btn_min")
         self.qfr_btns_window.addWidget(self.btn_min)
         
+         # Btn Normal 
         self.btn_rest = QtWidgets.QPushButton(self.qfr_content_window_menu)
         self.btn_rest.setStyleSheet("border:0px;")
         self.btn_rest.setText("")
@@ -131,6 +378,7 @@ class App_MainWindow(object):
         self.btn_rest.setObjectName("btn_min")
         self.qfr_btns_window.addWidget(self.btn_rest)
         
+         # Btn Maximize
         self.btn_max = QtWidgets.QPushButton(self.qfr_content_window_menu)
         self.btn_max.setStyleSheet("border:0px;")
         self.btn_max.setText("")
@@ -140,6 +388,8 @@ class App_MainWindow(object):
         self.btn_max.setIconSize(QtCore.QSize(20, 20))
         self.btn_max.setObjectName("btn_max")
         self.qfr_btns_window.addWidget(self.btn_max)
+
+         # Btn Close
         self.btn_close = QtWidgets.QPushButton(self.qfr_content_window_menu)
         self.btn_close.setMinimumSize(QtCore.QSize(0, 0))
         self.btn_close.setStyleSheet("border:0px;")
@@ -151,6 +401,7 @@ class App_MainWindow(object):
         self.btn_close.setObjectName("btn_close")
         self.qfr_btns_window.addWidget(self.btn_close)
         self.verticalLayout_2.addLayout(self.qfr_btns_window)
+
         spacerItem2 = QtWidgets.QSpacerItem(20, 35, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout_2.addItem(spacerItem2)
         self.horizontalLayout_3.addWidget(self.qfr_content_window_menu, 0, QtCore.Qt.AlignRight|QtCore.Qt.AlignVCenter)
@@ -175,83 +426,89 @@ class App_MainWindow(object):
         self.qfr_body_content = QtWidgets.QHBoxLayout()
         self.qfr_body_content.setSpacing(0)
         self.qfr_body_content.setObjectName("qfr_body_content")
-        self.qfr_body_left_content = QtWidgets.QFrame(self.qfr_body)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.qfr_body_left_content.sizePolicy().hasHeightForWidth())
-        self.qfr_body_left_content.setSizePolicy(sizePolicy)
-        self.qfr_body_left_content.setMinimumSize(QtCore.QSize(350, 0))
-        self.qfr_body_left_content.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.qfr_body_left_content.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.qfr_body_left_content.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.qfr_body_left_content.setObjectName("qfr_body_left_content")
-        self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.qfr_body_left_content)
-        self.verticalLayout_5.setContentsMargins(0, 0, 9, 0)
-        self.verticalLayout_5.setSpacing(0)
-        self.verticalLayout_5.setObjectName("verticalLayout_5")
-        self.qfr_display_left = QtWidgets.QFrame(self.qfr_body_left_content)
-        self.qfr_display_left.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.qfr_display_left.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.qfr_display_left.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.qfr_display_left.setObjectName("qfr_display_left")
-        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.qfr_display_left)
-        self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_7.setSpacing(15)
-        self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.lbl_cover_image_zoom = QtWidgets.QLabel(self.qfr_display_left)
-        self.lbl_cover_image_zoom.setMaximumSize(QtCore.QSize(350, 350))
-        self.lbl_cover_image_zoom.setAutoFillBackground(False)
-        self.lbl_cover_image_zoom.setText("")
-        self.lbl_cover_image_zoom.setPixmap(QtGui.QPixmap(BACKGROUND_COVER_IMG))
-        self.lbl_cover_image_zoom.setScaledContents(True)
-        self.lbl_cover_image_zoom.setObjectName("lbl_cover_image_zoom")
-        self.verticalLayout_7.addWidget(self.lbl_cover_image_zoom)
-        self.qhb_playlist_plus = QtWidgets.QHBoxLayout()
-        self.qhb_playlist_plus.setContentsMargins(-1, -1, -1, 0)
-        self.qhb_playlist_plus.setSpacing(0)
-        self.qhb_playlist_plus.setObjectName("qhb_playlist_plus")
-        self.lbl_playlist = QtWidgets.QLabel(self.qfr_display_left)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(18)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lbl_playlist.setFont(font)
-        self.lbl_playlist.setAlignment(QtCore.Qt.AlignCenter)
-        self.lbl_playlist.setObjectName("lbl_playlist")
-        self.qhb_playlist_plus.addWidget(self.lbl_playlist)
-        self.btn_add_list = QtWidgets.QPushButton(self.qfr_display_left)
-        self.btn_add_list.setMinimumSize(QtCore.QSize(40, 40))
-        self.btn_add_list.setMaximumSize(QtCore.QSize(40, 40))
-        font = QtGui.QFont()
-        font.setFamily("Arial Narrow")
-        font.setPointSize(-1)
-        font.setBold(False)
-        font.setWeight(50)
-        self.btn_add_list.setFont(font)
-        self.btn_add_list.setAutoFillBackground(False)
-        self.btn_add_list.setStyleSheet("QPushButton{\n"
-"border:0px;\n"
-"color: black;\n"
-"font-size: 35px;}\n"
-"\n"
-"\n"
-"QPushButton:hover{\n"
-"border:0px;\n"
-"color:#b851ff;\n"
-"font-size: 35px;}")
-        self.btn_add_list.setIconSize(QtCore.QSize(30, 30))
-        self.btn_add_list.setObjectName("btn_add_list")
-        self.qhb_playlist_plus.addWidget(self.btn_add_list)
-        self.verticalLayout_7.addLayout(self.qhb_playlist_plus)
-        self.qlw_list_playlists = QtWidgets.QListWidget(self.qfr_display_left)
-        self.qlw_list_playlists.setStyleSheet("background-color: rgb(225, 225, 225);\n"
-"border:0px;")
-        self.qlw_list_playlists.setObjectName("qlw_list_playlists")
-        self.verticalLayout_7.addWidget(self.qlw_list_playlists)
-        self.verticalLayout_5.addWidget(self.qfr_display_left)
-        self.qfr_body_content.addWidget(self.qfr_body_left_content, 0, QtCore.Qt.AlignLeft)
+
+
+        # Qf left container---------------------------------------------
+#         self.qfr_body_left_content = QtWidgets.QFrame(self.qfr_body)
+#         self.qfr_body_left_content.hide()
+#         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
+#         sizePolicy.setHorizontalStretch(0)
+#         sizePolicy.setVerticalStretch(0)
+#         sizePolicy.setHeightForWidth(self.qfr_body_left_content.sizePolicy().hasHeightForWidth())
+#         self.qfr_body_left_content.setSizePolicy(sizePolicy)
+#         self.qfr_body_left_content.setMinimumSize(QtCore.QSize(350, 0))
+#         self.qfr_body_left_content.setStyleSheet("background-color: rgb(0, 255, 255);")# TODO 
+#         self.qfr_body_left_content.setFrameShape(QtWidgets.QFrame.StyledPanel)
+#         self.qfr_body_left_content.setFrameShadow(QtWidgets.QFrame.Raised)
+#         self.qfr_body_left_content.setObjectName("qfr_body_left_content")
+#         self.verticalLayout_5 = QtWidgets.QVBoxLayout(self.qfr_body_left_content)
+#         self.verticalLayout_5.setContentsMargins(0, 0, 9, 0)
+#         self.verticalLayout_5.setSpacing(0)
+#         self.verticalLayout_5.setObjectName("verticalLayout_5")
+#         self.qfr_display_left = QtWidgets.QFrame(self.qfr_body_left_content)
+#         self.qfr_display_left.setStyleSheet("background-color: rgb(255, 255, 255);")
+#         self.qfr_display_left.setFrameShape(QtWidgets.QFrame.StyledPanel)
+#         self.qfr_display_left.setFrameShadow(QtWidgets.QFrame.Raised)
+#         self.qfr_display_left.setObjectName("qfr_display_left")
+#         self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.qfr_display_left)
+#         self.verticalLayout_7.setContentsMargins(0, 0, 0, 0)
+#         self.verticalLayout_7.setSpacing(15)
+#         self.verticalLayout_7.setObjectName("verticalLayout_7")
+#         self.lbl_cover_image_zoom = QtWidgets.QLabel(self.qfr_display_left)
+#         self.lbl_cover_image_zoom.setMaximumSize(QtCore.QSize(350, 350))
+#         self.lbl_cover_image_zoom.setAutoFillBackground(False)
+#         self.lbl_cover_image_zoom.setText("")
+#         self.lbl_cover_image_zoom.setPixmap(QtGui.QPixmap(BACKGROUND_COVER_IMG))
+#         self.lbl_cover_image_zoom.setScaledContents(True)
+#         self.lbl_cover_image_zoom.setObjectName("lbl_cover_image_zoom")
+#         self.verticalLayout_7.addWidget(self.lbl_cover_image_zoom)
+#         self.qhb_playlist_plus = QtWidgets.QHBoxLayout()
+#         self.qhb_playlist_plus.setContentsMargins(-1, -1, -1, 0)
+#         self.qhb_playlist_plus.setSpacing(0)
+#         self.qhb_playlist_plus.setObjectName("qhb_playlist_plus")
+#         self.lbl_playlist = QtWidgets.QLabel(self.qfr_display_left)
+#         font = QtGui.QFont()
+#         font.setFamily("Calibri")
+#         font.setPointSize(18)
+#         font.setBold(True)
+#         font.setWeight(75)
+#         self.lbl_playlist.setFont(font)
+#         self.lbl_playlist.setAlignment(QtCore.Qt.AlignCenter)
+#         self.lbl_playlist.setObjectName("lbl_playlist")
+#         self.qhb_playlist_plus.addWidget(self.lbl_playlist)
+#         self.btn_add_list = QtWidgets.QPushButton(self.qfr_display_left)
+#         self.btn_add_list.setMinimumSize(QtCore.QSize(40, 40))
+#         self.btn_add_list.setMaximumSize(QtCore.QSize(40, 40))
+#         font = QtGui.QFont()
+#         font.setFamily("Arial Narrow")
+#         font.setPointSize(-1)
+#         font.setBold(False)
+#         font.setWeight(50)
+#         self.btn_add_list.setFont(font)
+#         self.btn_add_list.setAutoFillBackground(False)
+#         self.btn_add_list.setStyleSheet("QPushButton{\n"
+# "border:0px;\n"
+# "color: black;\n"
+# "font-size: 35px;}\n"
+# "\n"
+# "\n"
+# "QPushButton:hover{\n"
+# "border:0px;\n"
+# "color:#b851ff;\n"
+# "font-size: 35px;}")
+#         self.btn_add_list.setIconSize(QtCore.QSize(30, 30))
+#         self.btn_add_list.setObjectName("btn_add_list")
+#         self.qhb_playlist_plus.addWidget(self.btn_add_list)
+#         self.verticalLayout_7.addLayout(self.qhb_playlist_plus)
+#         self.qlw_list_playlists = QtWidgets.QListWidget(self.qfr_display_left)
+#         self.qlw_list_playlists.setStyleSheet("background-color: rgb(225, 225, 225);\n"
+# "border:0px;")
+#         self.qlw_list_playlists.setObjectName("qlw_list_playlists")
+#         self.verticalLayout_7.addWidget(self.qlw_list_playlists)
+#         self.verticalLayout_5.addWidget(self.qfr_display_left)
+#         self.qfr_body_content.addWidget(self.qfr_body_left_content, 0, QtCore.Qt.AlignLeft)
+
+        # Qf  Body ---------------------------------------------
         self.qfr_body_middle_content = QtWidgets.QFrame(self.qfr_body)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Expanding)
         sizePolicy.setHorizontalStretch(0)
@@ -259,7 +516,8 @@ class App_MainWindow(object):
         sizePolicy.setHeightForWidth(self.qfr_body_middle_content.sizePolicy().hasHeightForWidth())
         self.qfr_body_middle_content.setSizePolicy(sizePolicy)
         self.qfr_body_middle_content.setMinimumSize(QtCore.QSize(600, 0))
-        self.qfr_body_middle_content.setStyleSheet("alternate-background-color: rgb(255, 255, 255);")
+        # Color box centro
+        self.qfr_body_middle_content.setStyleSheet("background-color: rgb(255, 0, 255);")# TODO
         self.qfr_body_middle_content.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.qfr_body_middle_content.setFrameShadow(QtWidgets.QFrame.Raised)
         self.qfr_body_middle_content.setObjectName("qfr_body_middle_content")
@@ -267,21 +525,23 @@ class App_MainWindow(object):
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setSpacing(0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
+
         self.qgv_video_content_middle = QVideoWidget(self.qfr_body_middle_content)
+        #self.qgv_video_content_middle.hide()# TODO componente video oculto 
         self.qgv_video_content_middle.setMinimumSize(QtCore.QSize(0, 0))
         self.qgv_video_content_middle.setMaximumSize(QtCore.QSize(1677, 1677))
         self.qgv_video_content_middle.setSizeIncrement(QtCore.QSize(0, 0))
-        self.qgv_video_content_middle.setStyleSheet("background-color: rgb(38, 38, 38);\n"
-"border:0px;")
+        self.qgv_video_content_middle.setStyleSheet("background-color: rgb(234, 234, 234);border:0px;")
         self.qgv_video_content_middle.setObjectName("qgv_video_content_middle")
         self.verticalLayout_4.addWidget(self.qgv_video_content_middle)
+
         self.list_songs = QtWidgets.QListWidget(self.qfr_body_middle_content)
+        #self.list_songs.hide()# TODO componente list songs oculto 
         self.list_songs.setMinimumSize(QtCore.QSize(0, 0))
         self.list_songs.setMaximumSize(QtCore.QSize(16777215, 300))
         self.list_songs.setSizeIncrement(QtCore.QSize(0, 0))
         self.list_songs.setAutoFillBackground(False)
-        self.list_songs.setStyleSheet("background-color: rgb(234, 234, 234); \n"
-"border: 0px;")
+        self.list_songs.setStyleSheet("background-color: rgb(234, 234, 234);border: 0px;")
         self.list_songs.setAlternatingRowColors(True)
         self.list_songs.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectItems)
         self.list_songs.setResizeMode(QtWidgets.QListView.Fixed)
@@ -292,6 +552,7 @@ class App_MainWindow(object):
         self.list_songs.setObjectName("qlw_list_songs_middle")
         self.verticalLayout_4.addWidget(self.list_songs)
         self.qfr_body_content.addWidget(self.qfr_body_middle_content)
+        # 
         self.qfr_body_rigth_content = QtWidgets.QFrame(self.qfr_body)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Preferred)
         sizePolicy.setHorizontalStretch(0)
@@ -307,209 +568,15 @@ class App_MainWindow(object):
         self.verticalLayout_8.setContentsMargins(-1, 0, 0, 0)
         self.verticalLayout_8.setSpacing(0)
         self.verticalLayout_8.setObjectName("verticalLayout_8")
-        self.qfr_display_right = QtWidgets.QFrame(self.qfr_body_rigth_content)
-        self.qfr_display_right.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.qfr_display_right.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.qfr_display_right.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.qfr_display_right.setObjectName("qfr_display_right")
-        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.qfr_display_right)
-        self.verticalLayout_9.setObjectName("verticalLayout_9")
-        self.qfr_coverimage_content = QtWidgets.QFrame(self.qfr_display_right)
-        self.qfr_coverimage_content.setMaximumSize(QtCore.QSize(16777215, 200))
-        self.qfr_coverimage_content.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.qfr_coverimage_content.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.qfr_coverimage_content.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.qfr_coverimage_content.setObjectName("qfr_coverimage_content")
-        self.verticalLayout_11 = QtWidgets.QVBoxLayout(self.qfr_coverimage_content)
-        self.verticalLayout_11.setObjectName("verticalLayout_11")
-        self.qvb_coverimagen = QtWidgets.QVBoxLayout()
-        self.qvb_coverimagen.setObjectName("qvb_coverimagen")
-        spacerItem3 = QtWidgets.QSpacerItem(20, 80, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.qvb_coverimagen.addItem(spacerItem3)
-        self.lbl_cover_image = QtWidgets.QLabel(self.qfr_coverimage_content)
-        self.lbl_cover_image.setMaximumSize(QtCore.QSize(130, 130))
-        self.lbl_cover_image.setAutoFillBackground(False)
-        self.lbl_cover_image.setStyleSheet("border : 1px solid #a6a6a6;")
-        self.lbl_cover_image.setText("")
-        self.lbl_cover_image.setPixmap(QtGui.QPixmap(BACKGROUND_COVER_IMG_SMALL))
-        self.lbl_cover_image.setScaledContents(True)
-        self.lbl_cover_image.setObjectName("lbl_cover_image")
-        self.qvb_coverimagen.addWidget(self.lbl_cover_image, 0, QtCore.Qt.AlignHCenter)
-        self.btn_edit_coverimage = QtWidgets.QPushButton(self.qfr_coverimage_content)
-        self.btn_edit_coverimage.setStyleSheet("QPushButton{\n"
-"border:0px;\n"
-"}\n"
-"")
-        self.btn_edit_coverimage.setText("")
-        icon3 = QtGui.QIcon()
-        icon3.addPixmap(QtGui.QPixmap(EDIT_ICON), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_edit_coverimage.setIcon(icon3)
-        self.btn_edit_coverimage.setIconSize(QtCore.QSize(25, 25))
-        self.btn_edit_coverimage.setObjectName("btn_edit_coverimage")
-        self.qvb_coverimagen.addWidget(self.btn_edit_coverimage)
-        spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.qvb_coverimagen.addItem(spacerItem4)
-        self.verticalLayout_11.addLayout(self.qvb_coverimagen)
-        self.verticalLayout_9.addWidget(self.qfr_coverimage_content)
-        self.line = QtWidgets.QFrame(self.qfr_display_right)
-        self.line.setMaximumSize(QtCore.QSize(250, 16777215))
-        self.line.setLineWidth(0)
-        self.line.setMidLineWidth(0)
-        self.line.setFrameShape(QtWidgets.QFrame.HLine)
-        self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
-        self.line.setObjectName("line")
-        self.verticalLayout_9.addWidget(self.line)
-        self.qfr_formLayout_content = QtWidgets.QFrame(self.qfr_display_right)
-        self.qfr_formLayout_content.setMaximumSize(QtCore.QSize(16777215, 300))
-        self.qfr_formLayout_content.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.qfr_formLayout_content.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.qfr_formLayout_content.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.qfr_formLayout_content.setObjectName("qfr_formLayout_content")
-        self.verticalLayout_12 = QtWidgets.QVBoxLayout(self.qfr_formLayout_content)
-        self.verticalLayout_12.setObjectName("verticalLayout_12")
-        
-        self.qfr_metadata_cotent = QtWidgets.QFormLayout()
-        self.qfr_metadata_cotent.setContentsMargins(5, -1, 15, -1)
-        self.qfr_metadata_cotent.setHorizontalSpacing(20)
-        self.qfr_metadata_cotent.setVerticalSpacing(10)
-        self.qfr_metadata_cotent.setObjectName("qfr_metadata_cotent")
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.qfr_metadata_cotent.setItem(0, QtWidgets.QFormLayout.FieldRole, spacerItem5)
-        self.lbl_metadata = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        font.setBold(True)
-        font.setWeight(75)
-        self.lbl_metadata.setFont(font)
-        self.lbl_metadata.setScaledContents(False)
-        self.lbl_metadata.setAlignment(QtCore.Qt.AlignCenter)
-        self.lbl_metadata.setObjectName("lbl_metadata")
-        self.qfr_metadata_cotent.setWidget(1, QtWidgets.QFormLayout.SpanningRole, self.lbl_metadata)
-        self.titleLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.titleLineEdit.setObjectName("titleLineEdit")
-        self.qfr_metadata_cotent.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.titleLineEdit)
-        self.artistLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.artistLabel.setFont(font)
-        self.artistLabel.setObjectName("artistLabel")
-        self.qfr_metadata_cotent.setWidget(3, QtWidgets.QFormLayout.LabelRole, self.artistLabel)
-        self.artistLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.artistLineEdit.setObjectName("artistLineEdit")
-        self.qfr_metadata_cotent.setWidget(3, QtWidgets.QFormLayout.FieldRole, self.artistLineEdit)
-        self.albumLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.albumLabel.setFont(font)
-        self.albumLabel.setObjectName("albumLabel")
-        self.qfr_metadata_cotent.setWidget(4, QtWidgets.QFormLayout.LabelRole, self.albumLabel)
-        self.albumLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.albumLineEdit.setObjectName("albumLineEdit")
-        self.qfr_metadata_cotent.setWidget(4, QtWidgets.QFormLayout.FieldRole, self.albumLineEdit)
-        self.genreLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.genreLabel.setFont(font)
-        self.genreLabel.setObjectName("genreLabel")
-        self.qfr_metadata_cotent.setWidget(5, QtWidgets.QFormLayout.LabelRole, self.genreLabel)
-        self.genreLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.genreLineEdit.setObjectName("genreLineEdit")
-        self.qfr_metadata_cotent.setWidget(5, QtWidgets.QFormLayout.FieldRole, self.genreLineEdit)
-        self.yearLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.yearLabel.setFont(font)
-        self.yearLabel.setObjectName("yearLabel")
-        self.qfr_metadata_cotent.setWidget(6, QtWidgets.QFormLayout.LabelRole, self.yearLabel)
-        self.yearLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.yearLineEdit.setObjectName("yearLineEdit")
-        self.qfr_metadata_cotent.setWidget(6, QtWidgets.QFormLayout.FieldRole, self.yearLineEdit)
-        self.timeLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.timeLabel.setFont(font)
-        self.timeLabel.setObjectName("timeLabel")
-        self.qfr_metadata_cotent.setWidget(7, QtWidgets.QFormLayout.LabelRole, self.timeLabel)
-        self.timeLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.timeLineEdit.setObjectName("timeLineEdit")
-        self.qfr_metadata_cotent.setWidget(7, QtWidgets.QFormLayout.FieldRole, self.timeLineEdit)
-        self.trackLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.trackLabel.setFont(font)
-        self.trackLabel.setObjectName("trackLabel")
-        self.qfr_metadata_cotent.setWidget(8, QtWidgets.QFormLayout.LabelRole, self.trackLabel)
-        self.trackLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.trackLineEdit.setObjectName("trackLineEdit")
-        self.qfr_metadata_cotent.setWidget(8, QtWidgets.QFormLayout.FieldRole, self.trackLineEdit)
+       
+      
 
-        self.videoLinkLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.videoLinkLabel.setFont(font)
-        self.videoLinkLabel.setObjectName("videoLinkLabel")
-        self.qfr_metadata_cotent.setWidget(9, QtWidgets.QFormLayout.LabelRole, self.videoLinkLabel)
-        self.videoLinkLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.videoLinkLineEdit.setObjectName("videoLinkLineEdit")
-        self.qfr_metadata_cotent.setWidget(9, QtWidgets.QFormLayout.FieldRole, self.videoLinkLineEdit)
+        # Crea el contenedor derecho con el formulario de los metadatos y la cover image de la cancionS
+        self._create_right_container()
+     
         
-        self.pathLinkLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.pathLinkLabel.setFont(font)
-        self.pathLinkLabel.setObjectName("pathLinkLineEdit")
-        self.qfr_metadata_cotent.setWidget(10, QtWidgets.QFormLayout.LabelRole, self.pathLinkLabel)
-        self.pathLinkLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
-        self.pathLinkLineEdit.setReadOnly(True)
-        self.pathLinkLineEdit.setObjectName("pathLinkLineEdit")
-        self.qfr_metadata_cotent.setWidget(10, QtWidgets.QFormLayout.FieldRole, self.pathLinkLineEdit)
         
-        spacerItem6 = QtWidgets.QSpacerItem(20, 70, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.qfr_metadata_cotent.setItem(11, QtWidgets.QFormLayout.LabelRole, spacerItem6)
-        self.titleLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        font.setBold(False)
-        font.setWeight(50)
-        self.titleLabel.setFont(font)
-        self.titleLabel.setLayoutDirection(QtCore.Qt.LeftToRight)
-        self.titleLabel.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
-        self.titleLabel.setObjectName("titleLabel")
-        self.qfr_metadata_cotent.setWidget(2, QtWidgets.QFormLayout.LabelRole, self.titleLabel)
-        self.verticalLayout_12.addLayout(self.qfr_metadata_cotent)
-        self.verticalLayout_9.addWidget(self.qfr_formLayout_content)
-        self.qfr_btn_save_form = QtWidgets.QFrame(self.qfr_display_right)
-        self.qfr_btn_save_form.setStyleSheet("background-color: rgb(255, 255, 255);")
-        self.qfr_btn_save_form.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.qfr_btn_save_form.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.qfr_btn_save_form.setObjectName("qfr_btn_save_form")
-        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.qfr_btn_save_form)
-        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
-        self.btn_save = QtWidgets.QPushButton(self.qfr_btn_save_form)
-        self.btn_save.setMaximumSize(QtCore.QSize(120, 35))
-        self.btn_save.setStyleSheet("QPushButton{\n"
-"border: 2px dotted #b851ff;\n"
-"border-radius: 15px;\n"
-"color:#b851ff;\n"
-"font-size: 12px;}\n"
-"\n"
-"QPushButton:Hover{\n"
-"background-color: #b851ff; color:white;\n"
-"border: none;}")
-        self.btn_save.setObjectName("btn_save")
-        self.horizontalLayout_8.addWidget(self.btn_save)
-        self.verticalLayout_9.addWidget(self.qfr_btn_save_form)
-        self.verticalLayout_8.addWidget(self.qfr_display_right)
+        self.verticalLayout_8.addWidget(self.contenedor_derecho)
         self.qfr_body_content.addWidget(self.qfr_body_rigth_content, 0, QtCore.Qt.AlignRight)
         self.verticalLayout_3.addLayout(self.qfr_body_content)
         self.verticalLayout.addWidget(self.qfr_body)
@@ -547,23 +614,26 @@ class App_MainWindow(object):
         self.btn_load_song.setIconSize(QtCore.QSize(40, 40))
         self.btn_load_song.setObjectName("btn_load_song")
         self.horizontalLayout_4.addWidget(self.btn_load_song)
-        self.btn_lyric = QtWidgets.QPushButton(self.qfr_footer_content_btns_music)
-        self.btn_lyric.setStyleSheet("QPushButton{\n"
-"border:0px;\n"
-"}\n"
-"")
-        self.btn_lyric.setText("")
-        icon5 = QtGui.QIcon()
-        icon5.addPixmap(QtGui.QPixmap(LYRIC_ICON), QtGui.QIcon.Normal, QtGui.QIcon.Off)
-        self.btn_lyric.setIcon(icon5)
-        self.btn_lyric.setIconSize(QtCore.QSize(25, 25))
-        self.btn_lyric.setObjectName("btn_lyric")
-        self.horizontalLayout_4.addWidget(self.btn_lyric)
+
+        ### BTN MICROPHONE
+        # self.btn_lyric = QtWidgets.QPushButton(self.qfr_footer_content_btns_music)
+        # self.btn_lyric.setStyleSheet("QPushButton{\n"
+        # "border:0px;\n"
+        # "}\n"
+        # "")
+        # self.btn_lyric.setText("")
+        # icon5 = QtGui.QIcon()
+        # icon5.addPixmap(QtGui.QPixmap(LYRIC_ICON), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        # self.btn_lyric.setIcon(icon5)
+        # self.btn_lyric.setIconSize(QtCore.QSize(25, 25))
+        # self.btn_lyric.setObjectName("btn_lyric")
+        # self.horizontalLayout_4.addWidget(self.btn_lyric)
+
         self.btn_previus = QtWidgets.QPushButton(self.qfr_footer_content_btns_music)
         self.btn_previus.setStyleSheet("QPushButton{\n"
-"border:0px;\n"
-"}\n"
-"")
+        "border:0px;\n"
+        "}\n"
+        "")
         self.btn_previus.setText("")
         icon6 = QtGui.QIcon()
         icon6.addPixmap(QtGui.QPixmap(PREVIUS_ICON), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -629,8 +699,8 @@ class App_MainWindow(object):
     def retranslateUi(self, App_MainWindow):
         _translate = QtCore.QCoreApplication.translate
         App_MainWindow.setWindowTitle(_translate("App_MainWindow", "MainWindow"))
-        self.lbl_playlist.setText(_translate("App_MainWindow", "P L A Y L I S T S"))
-        self.btn_add_list.setText(_translate("App_MainWindow", "+"))
+        #self.lbl_playlist.setText(_translate("App_MainWindow", "P L A Y L I S T S"))
+        #self.btn_add_list.setText(_translate("App_MainWindow", "+"))
         self.lbl_metadata.setText(_translate("App_MainWindow", "METADATOS"))
         self.artistLabel.setText(_translate("App_MainWindow", "Artist:"))
         self.albumLabel.setText(_translate("App_MainWindow", "Album:"))
@@ -642,6 +712,7 @@ class App_MainWindow(object):
         self.titleLabel.setText(_translate("App_MainWindow", "Title:"))
         self.pathLinkLabel.setText(_translate("App_MainWindow", "Path Dir:"))
         self.btn_save.setText(_translate("App_MainWindow", "Save"))
+        self.btn_cancel.setText(_translate("App_MainWindow", "Cancel"))
 
 
 if __name__ == "__main__":

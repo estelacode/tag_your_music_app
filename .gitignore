@@ -6,3 +6,5 @@ src/assets/music
 app_log
 todo_songModel.py
 *.db
+tag_your_music_v2.egg-info
+.vscode

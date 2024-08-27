@@ -4,7 +4,7 @@ from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import  pyqtSignal
 from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QMenu
 from PyQt5.QtGui import QPixmap,QIcon
-from view.config import MENU_ITEM_SONG_ICON
+from src.view.config import COVER_IMG_DEFAULT
 
 class QCustomQWidget(QWidget):
     """  Class QCustomQWidget
@@ -106,12 +106,12 @@ class QCustomQWidget(QWidget):
     def getMenuButton(self):
         return self.btn_menu 
     
-    def crear_menu(self, action_eliminate, action_edit, action_add_to_playlist):
+    def crear_menu(self, action_eliminate):
         menu = QMenu()
         #menu.setStyleSheet("background-color: #b851ff; color:white; QMenu:Hover:{background-color: #f0f0f0; color:black}")
         #menu.setStyleSheet("background-color: #f0f0f0; color:white; QMenu:Hover:{background-color: #f0f0f0; color:b851ff !important;}")
-        menu.addAction("Añadir a playlist 🎶", action_add_to_playlist)
-        menu.addAction("Editar metadatos 💽", action_edit)
+        #menu.addAction("Añadir a playlist 🎶", action_add_to_playlist)
+        #menu.addAction("Editar metadatos 💽", action_edit)
         menu.addAction("Quitar ✖️",action_eliminate)
         return menu
 
@@ -157,7 +157,7 @@ class QCustomQWidget(QWidget):
             self.lbl_icon_cover_img.setPixmap(pixmap) 
         else:
             # cargamos una imagen desde el directorio
-            self.lbl_icon_cover_img.setPixmap(QPixmap('assets/images/cover_default.png'))
+            self.lbl_icon_cover_img.setPixmap(QPixmap(COVER_IMG_DEFAULT))
 
         self.lbl_icon_cover_img.setMaximumSize(QtCore.QSize(60, 60))
         self.lbl_icon_cover_img.setScaledContents(True)
