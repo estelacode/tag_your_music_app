@@ -1,0 +1,8 @@
+__pycache__
+.venv
+docs
+src/assets/videos
+src/assets/music
+app_log
+todo_songModel.py
+*.db

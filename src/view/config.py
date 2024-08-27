@@ -1,0 +1,21 @@
+VIEW_WITDH = 1500
+VIEW_HEIGHT = 900
+APP_MAIN_WIN_WITDH = 1316
+APP_MAIN_WIN_HEIGHT = 765
+LOGO_APP = "assets/images/t8.png"
+MINIMIZE_ICON = "assets/images/minimi.png"
+NORMAL_ICON = "assets/images/normal.png"
+MAXIMIZE_ICON = "assets/images/max.png"
+CLOSE_ICON = "assets/images/close.png"
+BACKGROUND_COVER_IMG = "assets/images/coverimage_default_zoom.PNG"
+BACKGROUND_COVER_IMG_SMALL = "assets/images/coverimage_default_small.PNG"
+EDIT_ICON = "assets/images/edit.png"
+MP3_ICON = "assets/images/mp3.png"
+LYRIC_ICON = "assets/images/lyric.png"
+PREVIUS_ICON = "assets/images/previus.png"
+PLAY_ICON = "assets/images/play.png"
+NEXT_ICON = "assets/images/next.png"
+VOLUME_ICON = "assets/images/volumen.png"
+
+DEFAULT_MUSIC_DIR ="./assets/music"
+MENU_ITEM_SONG_ICON = "assets/images/menu_song.png"
