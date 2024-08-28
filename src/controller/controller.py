@@ -1,8 +1,8 @@
 import logging
-import eyed3
 from src.utils.song import Song
 from src.view.view import View
 from src.model.model import Model
+from pathlib import Path
 logger = logging.getLogger(__name__)
 
 class Controller:
@@ -65,6 +65,29 @@ class Controller:
         #4. Ocultar componente formulario en la vista.
         self._view.hide_form_component()
 
+    def play_song(self):
+
+        # 1. Recuperar la posicion de cancion seleccionada
+        pos = self._view.ui.list_songs.currentRow()
+        if  pos >=0:
+            #box_item: <class 'QListWidgetItem'>
+            box_item = self._view.ui.list_songs.item(pos)
+
+            # 2. Obtener path
+            path = box_item.data(32)
+
+            item = self._view.ui.list_songs.itemWidget(box_item)
+            video_url = item.getVideoUrl()
+
+            # 3. Reproducir cancion 
+            if ".mp4" in video_url:
+                self._view.play_and_stop_video(video_url)
+
+            else:
+                self._view.play_and_stop_song(path)
+ 
+       
+        
 
     def _connect_signals(self):
         """
@@ -79,7 +102,7 @@ class Controller:
 
         """
         logger.debug("Called _connect_signals method")
-      
+        self._view.ui.btn_min.clicked.connect(self._view.minimize_view)
         self._view.ui.btn_max.clicked.connect(self._view.maximize_view)
         self._view.ui.btn_rest.clicked.connect(self._view.restore_view)
         self._view.ui.btn_close.clicked.connect(self._view.close_view)
@@ -87,6 +110,7 @@ class Controller:
         self._view.ui.btn_save.clicked.connect(self.save)
         self._view.ui.btn_cancel.clicked.connect(self.cancel)
         self._view.ui.btn_edit_coverimage.clicked.connect(self._view.edit_cover_image)
+        self._view.ui.btn_play.clicked.connect(self.play_song)
 
 
 

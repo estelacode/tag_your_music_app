@@ -3,6 +3,7 @@ __pycache__
 docs
 src/assets/videos
 src/assets/music
+src/assets/images/*.jpg
 app_log
 todo_songModel.py
 *.db

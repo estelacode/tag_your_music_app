@@ -1,15 +1,15 @@
 
 from src.view.gui_layout import App_MainWindow
 from src.view.gui_custom_widget import QCustomQWidget
-from src.view.config import DEFAULT_MUSIC_DIR, BACKGROUND_COVER_IMG_SMALL
+from src.view.config import DEFAULT_MUSIC_DIR, PLAY_ICON, PAUSE_ICON
 from src.utils.song import Song
 from PyQt5.QtWidgets import  QFileDialog ,QListWidgetItem
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtCore import Qt, QByteArray, QBuffer, QIODevice
-from PyQt5.QtGui import QPixmap, QColor
-
-
+from PyQt5.QtCore import Qt, QByteArray, QBuffer, QIODevice, QUrl
+from PyQt5.QtGui import QPixmap, QColor, QIcon
+from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
 import logging
+
 logger = logging.getLogger(__name__)
 
 class View(QMainWindow):
@@ -24,8 +24,17 @@ class View(QMainWindow):
         # Ocultar botones de maximnizar, minimizar y cerrar de la venta de windows para usar los de la gui_layout.py
         self.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
 
-        # Lista de canciones de tipo song
-        self.songs = []
+        # Reproductor Mp3
+        self.music_player = QMediaPlayer()
+
+        # Reproductor Mp4
+        self.video_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
+   
+
+        # sound Off
+        self.on = False 
+        
+
 
     def minimize_view(self):
         """
@@ -65,7 +74,7 @@ class View(QMainWindow):
         """
         # Seleccionar fichero mp3
         path, _ = QFileDialog.getOpenFileName(self, "Open Song", DEFAULT_MUSIC_DIR, "Sound Files (*.mp3 *.ogg *.wav *.m4a)") 
-        logger.debug(f"Path del mp3 en la vista: {path}")
+        logger.debug(f"Path del fichero seleccionado en la vista: {path}")
         return path
     
 
@@ -128,8 +137,8 @@ class View(QMainWindow):
         self.ui.yearLineEdit.setText(song.release_date)
         self.ui.timeLineEdit.setText(song.duration)
         self.ui.trackLineEdit.setText(song.track_num)
-        self.ui.videoLinkLineEdit.setText(song.path_mp4)
-        self.ui.pathLinkLineEdit.setText(song.path_mp3) 
+        self.ui.videoLinkLineEdit.setText(song.video_url)
+        self.ui.pathLinkLineEdit.setText(song.path) 
 
         if song.coverImage:
             pixmap = QPixmap()
@@ -161,8 +170,8 @@ class View(QMainWindow):
         new_release_date =  self.ui.yearLineEdit.text()
         new_time =  self.ui.timeLineEdit.text()
         new_track =  self.ui.trackLineEdit.text()
-        path_mp4 =  self.ui.videoLinkLineEdit.text()
-        path_mp3 = self.ui.pathLinkLineEdit.text()
+        video_url =  self.ui.videoLinkLineEdit.text()
+        path = self.ui.pathLinkLineEdit.text()
 
         # get QPixmap from QLabel
         pixmap = self.ui.lbl_cover_image.pixmap()
@@ -174,7 +183,7 @@ class View(QMainWindow):
         assert ok
         new_coverImage = ba.data()
 
-        return Song(new_title, new_artist, new_album, new_genre,new_release_date, new_time,new_track, new_coverImage,path_mp3, path_mp4)
+        return Song(new_title, new_artist, new_album, new_genre,new_release_date, new_time,new_track, new_coverImage,path, video_url)
 
 
     def add_song(self,updated_song:Song):    
@@ -196,12 +205,17 @@ class View(QMainWindow):
         item.setAlbum(updated_song.album)
         item.setGenre(updated_song.genre)
         item.setDuration(updated_song.duration)
+        item.setVideoUrl(updated_song.video_url) # añadir ruta video mp4 (no se guarda en metadatos del mp3)
         item.btn_menu.setMenu(item.crear_menu(self.remove_item))
         #item.btn_menu.setMenu(item.crear_menu(self.remove_item, self.edit_item, self.add_item_to_playlist))
         item.btn_menu.clicked.connect(item.open_menu)
       
         # Create QListWidgetItem (Elemento de la lista que contiene el elemento custom)
-        box_item = QListWidgetItem(self.ui.list_songs)
+        #box_item = QListWidgetItem(self.ui.list_songs)
+        box_item = QListWidgetItem()
+        # Añadir la ruta de la cancion seleccionada de forma independiente.
+        box_item.setData(32, updated_song.path)
+
         # Set size hint. Same size 
         box_item.setSizeHint(item.sizeHint()) 
 
@@ -210,12 +224,60 @@ class View(QMainWindow):
         self.ui.list_songs.setItemWidget(box_item, item)
 
 
+    def play_and_stop_song(self, path_mp3):
+        url = QUrl.fromLocalFile(path_mp3)
+        contenido = QMediaContent(url)
+        self.music_player.setMedia(contenido)
+
+        # Si esta apagada se encendera. Si esta sonando, se parará
+        if  self.on == False:
+            self.music_player.play()
+            self.on = True
+            #Animar icono play
+            icon = QIcon()
+            icon.addPixmap(QPixmap(PAUSE_ICON), QIcon.Normal, QIcon.Off)
+            self.ui.btn_play.setIcon(icon)
+        else:
+            self.music_player.stop()
+            self.on = False
+            #Animar icono play
+            icon = QIcon()
+            icon.addPixmap(QPixmap(PLAY_ICON), QIcon.Normal, QIcon.Off)
+            self.ui.btn_play.setIcon(icon)
+
+    def play_and_stop_video(self,path_mp4):
+
+        print("ruta_video:",path_mp4)
+        url = QUrl.fromLocalFile(path_mp4)
+        self.video_player.setMedia(QMediaContent(url))
+        self.video_player.setVideoOutput(self.ui.qgv_video_content_middle)
+        
+        # play /stop video
+        if  self.on == False:
+            print("Play video...")
+            self.video_player.play()
+            self.on = True
+            icon = QIcon()
+            icon.addPixmap(QPixmap(PAUSE_ICON), QIcon.Normal, QIcon.Off)
+            self.ui.btn_play.setIcon(icon)
+        else:
+            print("Stop video...")
+            self.video_player.stop()
+            self.on = False
+            #Animar icono play
+            icon = QIcon()
+            icon.addPixmap(QPixmap(PLAY_ICON), QIcon.Normal, QIcon.Off)
+            self.ui.btn_play.setIcon(icon)
+        
+
     def remove_item(self):
         """
         Removes the currently selected item from the list of songs.
         """
+       
         pos = self.ui.list_songs.currentRow()
         if pos >= 0:
+            print("Calling remove item")
             # Borrar el item de la lista de pyq5
             box_item = self.ui.list_songs.takeItem(pos)
             self.ui.list_songs.removeItemWidget(box_item)   

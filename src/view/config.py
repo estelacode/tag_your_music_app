@@ -14,6 +14,7 @@ MP3_ICON = "src/assets/images/mp3.png"
 LYRIC_ICON = "src/assets/images/lyric.png"
 PREVIUS_ICON = "src/assets/images/previus.png"
 PLAY_ICON = "src/assets/images/play.png"
+PAUSE_ICON = "src/assets/images/pause.png"
 NEXT_ICON = "src/assets/images/next.png"
 VOLUME_ICON = "src/assets/images/volumen.png"
 

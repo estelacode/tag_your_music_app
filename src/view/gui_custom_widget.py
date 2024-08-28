@@ -15,6 +15,7 @@ class QCustomQWidget(QWidget):
     def __init__ (self, parent = None):
         super(QCustomQWidget, self).__init__(parent)
     
+        self.video_url =""
         self.qhbox_main_content = QHBoxLayout()
     
         self.qvbox_0 = QVBoxLayout()
@@ -38,21 +39,21 @@ class QCustomQWidget(QWidget):
         self.qvbox_1.setSpacing(0)
         
         
-        # BOX 2
+        # BOX 2------------album
         self.qvbox_2 = QVBoxLayout()
         self.lbl_album_qvb = QLabel()
         self.lbl_album_qvb.setFont(QtGui.QFont("Calibri", 10))
         self.lbl_album_qvb.setFixedHeight(15)
         self.qvbox_2.addWidget(self.lbl_album_qvb)
         
-        # BOX 3
+        # BOX 3---------------genero
         self.qvbox_3 = QVBoxLayout()
         self.lbl_genre_qvb = QLabel()
         self.lbl_genre_qvb.setFont(QtGui.QFont("Calibri", 10))
         self.lbl_genre_qvb.setFixedHeight(15)
         self.qvbox_3.addWidget(self.lbl_genre_qvb)
         
-        # BOX 4
+        # BOX 4-------------------duration
         self.qvbox_4 = QVBoxLayout()
         self.lbl_duration_qvb = QLabel()
         self.lbl_duration_qvb.setFont(QtGui.QFont("Calibri", 10))
@@ -162,4 +163,10 @@ class QCustomQWidget(QWidget):
         self.lbl_icon_cover_img.setMaximumSize(QtCore.QSize(60, 60))
         self.lbl_icon_cover_img.setScaledContents(True)
         
+    def setVideoUrl(self, video_url):
+        self.video_url = video_url
+
+    def getVideoUrl(self):
+        return self.video_url
+
         

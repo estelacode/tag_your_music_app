@@ -13,7 +13,7 @@ class Model:
         pass        
 
 
-    def get_metadata(self, path_mp3)->Song:
+    def get_metadata(self, path)->Song:
         """
         Retrieves metadata from an MP3 file.
 
@@ -25,7 +25,7 @@ class Model:
         """
         
         try:
-            audiofile = eyed3.load(path_mp3)
+            audiofile = eyed3.load(path)
         except Exception as e:
             logger.debug(f'Error:{e}')
         
@@ -40,6 +40,7 @@ class Model:
         duration = ""
         track_num = ""
         coverImage = ""
+        video_url= ""
 
         # Mapeo de datos. Extrear datos del objeto audiofile y lo guardo en variables.
         if audiofile.tag.title != None:
@@ -54,6 +55,9 @@ class Model:
             release_date = str(audiofile.tag.release_date)
         if audiofile.info.time_secs != None:
             duration = strftime("%M:%S", gmtime(audiofile.info.time_secs))
+        
+        if audiofile.tag.comments != None:
+           video_url =  ""#audiofile.tag.comments
 
         if audiofile.tag.track_num != None:
             # Must return a 2-tuple of (track-number, total-number-of-tracks)
@@ -65,11 +69,11 @@ class Model:
 
        
         # Crear objeto song con dichas variables.
-        return Song(title, artist, album, genre,release_date, duration,track_num, coverImage,path_mp3)
+        return Song(title, artist, album, genre,release_date, duration,track_num, coverImage,path, video_url)
 
     def update_metadata(self, new_song:Song):
         # carga el fichero mp3
-        audiofile = eyed3.load(new_song.path_mp3) 
+        audiofile = eyed3.load(new_song.path) 
         
         if audiofile.tag is None: # si el audifile tiene la tag a None
             audiofile.tag = eyed3.id3.Tag() # se le inicializa la tag
@@ -79,6 +83,7 @@ class Model:
         audiofile.tag.release_date = new_song.release_date  #le asigna release data
         audiofile.tag.images.set(3, new_song.coverImage , "image/jpg" ,u"Cover") #le asigna nueva cover
         audiofile.tag.genre = new_song.genre #le asigna nuevo genero
+        #audiofile.tag.comments.set(new_song.video_url) # asignar url video youtube
         if new_song.track_num: 
             audiofile.tag.track_num = new_song.track_num
             
