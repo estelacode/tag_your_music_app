@@ -1,7 +1,7 @@
 
 from src.view.gui_layout import App_MainWindow
 from src.view.gui_custom_widget import QCustomQWidget
-from src.view.config import DEFAULT_MUSIC_DIR, PLAY_ICON, PAUSE_ICON
+from src.view.config import DEFAULT_MUSIC_DIR,DEFAULT_VIDEO_DIR, PLAY_ICON, PAUSE_ICON, LOW_VOLUME_ICON, MUTE_ICON, MID_VOLUME_ICON, HIGH_VOLUME_ICON
 from src.utils.song import Song
 from PyQt5.QtWidgets import  QFileDialog ,QListWidgetItem
 from PyQt5.QtWidgets import QMainWindow
@@ -30,10 +30,13 @@ class View(QMainWindow):
         # Reproductor Mp4
         self.video_player = QMediaPlayer(None, QMediaPlayer.VideoSurface)
    
-
         # sound Off
         self.on = False 
-        
+        # video off
+        self.video_on = False 
+
+        self.volumen = 10 # Valor inicial del volumen (10%)
+
 
 
     def minimize_view(self):
@@ -154,6 +157,18 @@ class View(QMainWindow):
         if imagePath: # si es la imagen es valida
             pixmap = QPixmap(imagePath)
             self.ui.lbl_cover_image.setPixmap(pixmap) # la muestro en el componente.
+
+    def get_path_mp4(self):
+        """ 
+        Carga una fichero de musica a la aplicacion. 
+        Crea un objeto de tipo Song y lo añade a la lista interna.
+        Crea un widget para añadirlo a la ListWidgetItem
+        """
+        # Seleccionar fichero mp3
+        path, _ = QFileDialog.getOpenFileName(self, "Path video", DEFAULT_VIDEO_DIR, "Sound Files (*.mp4 *.mov *.avi)") 
+        logger.debug(f"Path del fichero mp4 seleccionado en la vista: {path}")
+        if path:
+            self.ui.videoLinkLineEdit.setText(path)
         
     def get_form_metadata(self)-> Song:
         """
@@ -206,9 +221,7 @@ class View(QMainWindow):
         item.setGenre(updated_song.genre)
         item.setDuration(updated_song.duration)
         item.setVideoUrl(updated_song.video_url) # añadir ruta video mp4 (no se guarda en metadatos del mp3)
-        item.btn_menu.setMenu(item.crear_menu(self.remove_item))
-        #item.btn_menu.setMenu(item.crear_menu(self.remove_item, self.edit_item, self.add_item_to_playlist))
-        item.btn_menu.clicked.connect(item.open_menu)
+        item.btn_close_song.clicked.connect(self.remove_item)
       
         # Create QListWidgetItem (Elemento de la lista que contiene el elemento custom)
         #box_item = QListWidgetItem(self.ui.list_songs)
@@ -231,6 +244,7 @@ class View(QMainWindow):
 
         # Si esta apagada se encendera. Si esta sonando, se parará
         if  self.on == False:
+            print("Play song...")
             self.music_player.play()
             self.on = True
             #Animar icono play
@@ -238,6 +252,7 @@ class View(QMainWindow):
             icon.addPixmap(QPixmap(PAUSE_ICON), QIcon.Normal, QIcon.Off)
             self.ui.btn_play.setIcon(icon)
         else:
+            print("Stop song...")
             self.music_player.stop()
             self.on = False
             #Animar icono play
@@ -253,21 +268,60 @@ class View(QMainWindow):
         self.video_player.setVideoOutput(self.ui.qgv_video_content_middle)
         
         # play /stop video
-        if  self.on == False:
+        if  self.video_on == False:
             print("Play video...")
             self.video_player.play()
-            self.on = True
+            self.video_on = True
             icon = QIcon()
             icon.addPixmap(QPixmap(PAUSE_ICON), QIcon.Normal, QIcon.Off)
             self.ui.btn_play.setIcon(icon)
         else:
             print("Stop video...")
             self.video_player.stop()
-            self.on = False
+            self.video_on = False
             #Animar icono play
             icon = QIcon()
             icon.addPixmap(QPixmap(PLAY_ICON), QIcon.Normal, QIcon.Off)
             self.ui.btn_play.setIcon(icon)
+    
+    def update_volume(self):
+        self.ui.horizontalSlider.setMinimum(0)
+        self.ui.horizontalSlider.setMaximum(100)
+
+        # Recuperar el valor de volumen del slider
+        self.volumen = self.ui.horizontalSlider.value()
+
+
+        # Si ek reproductor de video esta on, le cambio  el volumen 
+        if self.video_on:
+            self.video_player.setVolume(self.volumen)
+
+        # Si el reproductor de musica esta on, le cambio el volumen
+        if self.on:
+            self.music_player.setVolume(self.volumen)
+
+        # Animación del icono de sonido
+        if self.volumen == 0:
+            icon = QIcon()
+            icon.addPixmap(QPixmap(MUTE_ICON), QIcon.Normal, QIcon.Off)
+            self.ui.btn_volumen.setIcon(icon)
+
+        elif self.volumen <= 20:
+            self.silencio = True
+            icon = QIcon()
+            icon.addPixmap(QPixmap(LOW_VOLUME_ICON), QIcon.Normal, QIcon.Off)
+            self.ui.btn_volumen.setIcon(icon)
+
+        elif self.volumen <= 50:
+            self.silencio = True
+            icon = QIcon()
+            icon.addPixmap(QPixmap(MID_VOLUME_ICON), QIcon.Normal, QIcon.Off)
+            self.ui.btn_volumen.setIcon(icon)
+        else:
+            self.silencio = True
+            icon = QIcon()
+            icon.addPixmap(QPixmap(HIGH_VOLUME_ICON), QIcon.Normal, QIcon.Off)
+            self.ui.btn_volumen.setIcon(icon)
         
 
     def remove_item(self):

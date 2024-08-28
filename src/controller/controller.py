@@ -22,15 +22,16 @@ class Controller:
         # 1.Obtener el path de la cancion selecionada en la vista.
         path = self._view.get_path_mp3()
 
-        # 2. Extraer metadatos del fichero mp3 y guardarlos en un objeto de tipo Song.
-        song = self._model.get_metadata(path)
+        if path:
+            # 2. Extraer metadatos del fichero mp3 y guardarlos en un objeto de tipo Song.
+            song = self._model.get_metadata(path)
 
-        # 3. Mostrar componente formulario en la vista.
-        self._view.show_component_form()
+            # 3. Mostrar componente formulario en la vista.
+            self._view.show_component_form()
 
-        # 4. Mostrar los campos rellenados con los metadatos de la cancion seleccionada.
-        self._view.fill_form_metadata(song)
-
+            # 4. Mostrar los campos rellenados con los metadatos de la cancion seleccionada.
+            self._view.fill_form_metadata(song)
+   
     
     def save(self):
         """
@@ -82,12 +83,82 @@ class Controller:
             # 3. Reproducir cancion 
             if ".mp4" in video_url:
                 self._view.play_and_stop_video(video_url)
-
             else:
                 self._view.play_and_stop_song(path)
- 
-       
+    
+    def play_next_song(self):
+
+        # Obtener el número de elementos
+        num_items = self._view.ui.list_songs.count()
+
+        # 1. Recuperar la posicion de cancion seleccionada
+        pos = self._view.ui.list_songs.currentRow()
+
+        #Next
+        pos_next= pos +1
+
+        if pos_next < num_items: #Controlar que no desborde por la cola de la derech
+            # se convierte en el elemento actual de la lista
+            self._view.ui.list_songs.setCurrentRow(pos_next)
+
+            #box_item: <class 'QListWidgetItem'>
+            box_item = self._view.ui.list_songs.item(pos_next)
+
+            # 2. Obtener path
+            path = box_item.data(32)
+
+            item = self._view.ui.list_songs.itemWidget(box_item)
+            video_url = item.getVideoUrl()
+
+            # Como cambio de elemento de la lista paro todo significa:
+            self._view.video_player.stop() # se para el video
+            self._view.video_on = False # el video esta apagado
+            self._view.music_player.stop()# se para el reproductor
+            self._view.on = False # la musica esta apagada
+               
+            # 3. Reproducir cancion 
+            if ".mp4" in video_url:
+                self._view.play_and_stop_video(video_url)
+            else:
+                
+                self._view.play_and_stop_song(path)
+    
+
+    def play_previous_song(self):
+          # Obtener el número de elementos
+        num_items = self._view.ui.list_songs.count()
+
+        # 1. Recuperar la posicion de cancion seleccionada
+        pos = self._view.ui.list_songs.currentRow()
+
+        #Next
+        pos_prev= pos - 1
         
+        if pos_prev >=0: # controlar que no desborde por la izquierdo
+            # se convierte en el elemento actual de la lista
+            self._view.ui.list_songs.setCurrentRow(pos_prev)
+
+            #box_item: <class 'QListWidgetItem'>
+            box_item = self._view.ui.list_songs.item(pos_prev)
+
+            # 2. Obtener path
+            path = box_item.data(32)
+
+            item = self._view.ui.list_songs.itemWidget(box_item)
+            video_url = item.getVideoUrl()
+
+            self._view.video_player.stop()
+            self._view.video_on = False
+            self._view.music_player.stop()
+            self._view.on = False
+               
+            # 3. Reproducir cancion 
+            if ".mp4" in video_url:
+                self._view.play_and_stop_video(video_url)
+            else:
+                
+                self._view.play_and_stop_song(path)
+    
 
     def _connect_signals(self):
         """
@@ -111,7 +182,11 @@ class Controller:
         self._view.ui.btn_cancel.clicked.connect(self.cancel)
         self._view.ui.btn_edit_coverimage.clicked.connect(self._view.edit_cover_image)
         self._view.ui.btn_play.clicked.connect(self.play_song)
+        self._view.ui.btn_next.clicked.connect(self.play_next_song)
+        self._view.ui.btn_previus.clicked.connect(self.play_previous_song)
 
+        self._view.ui.btn_video.clicked.connect(self._view.get_path_mp4)
+        self._view.ui.horizontalSlider.valueChanged.connect(self._view.update_volume)
 
 
         
