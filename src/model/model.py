@@ -4,13 +4,56 @@ from time import gmtime
 from time import strftime
 from src.utils.song import Song
 import logging
+import sqlite3
 logger = logging.getLogger(__name__)
 
 
 class Model:
     
     def __init__(self):
-        pass        
+    
+        # Crear conexion a la base de datos. 
+        self.con = sqlite3.connect('tagyourmusic.db')
+        self.cur = self.con.cursor()
+        self.create_table()
+
+    def create_table(self):
+        # Crear TABLE Canciones 
+        self.cur.execute("""CREATE TABLE IF NOT EXISTS Songs(id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                                              title VARCHAR,
+                                                              artist  VARCHAR, 
+                                                              album VARCHAR,
+                                                              genre VARCHAR,
+                                                              release_date INTEGER,
+                                                              duration VARCHAR, 
+                                                              track_num VARCHAR, 
+                                                              coverImage BLOB,
+                                                              path VARCHAR,   
+                                                              video_url VARCHAR)""")
+     
+    
+    def create_song(self, song:Song):
+        
+        title  = song.title
+        artist = song.artist
+        album =  song.album
+        genre =  song.genre
+        release_date = song.release_date
+        duration = song.duration
+        track_num = song.track_num
+        coverImage = song.coverImage
+        path= song.path
+        video_url = song.video_url
+
+        self.cur.execute(f"""INSERT INTO Songs("title, artist, album, genre, release_date,duration, track_num, coverImage, path, video_url) 
+                         VALUES({title}, {artist}, {album},{genre}, {release_date},{duration}, {track_num}, {coverImage}, {path}, {video_url})""")
+
+
+    def delete_song(self,id):
+        self.cur.execute(f"""DELETE FROM Song WHERE id={id}""")
+
+    def get_all_songs(self):
+        self.cur.execute("""SELECT * FROM Canciones""")
 
 
     def get_metadata(self, path)->Song:

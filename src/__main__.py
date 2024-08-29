@@ -6,7 +6,7 @@ from src.view.view import View
 from src.model.model import Model
 from src.controller.controller import Controller
 import logging
-import sqlite3
+
 
 
 
@@ -34,7 +34,4 @@ def main(args = None):
 #  Punto de entrada  de la app
 if __name__ == '__main__':
     logger.info("Running my app")
-
-    # Conectar a la base de datos
-    #db_connection = sqlite3.connect('tagyourmusic.db')
     sys.exit(main())

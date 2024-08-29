@@ -39,10 +39,11 @@ class Controller:
         cleaning the form metadata, hiding the form component, and adding the updated song to the song list.
         """
         
+
         # 1. Recuperar los metadatos modificados por el usuario en el formulario.
         updated_song = self._view.get_form_metadata()
 
-        # 2. Actualizar metadatos en el fichero mp3 .
+        # 2. Actualizar metadatos en el fichero mp3.
         self._model.update_metadata(updated_song)
 
         # 3. Limpiar los campos del formulario en la vista.
@@ -53,6 +54,12 @@ class Controller:
 
         #5. Añadir cancion con los metadatos ya actualizados al la lista de canciones.
         self._view.add_song(updated_song)
+
+        #6. Anadir la cancion a la base de datos
+        self._model.create_song(updated_song)
+
+        
+
 
 
     def cancel(self):
@@ -74,7 +81,7 @@ class Controller:
             #box_item: <class 'QListWidgetItem'>
             box_item = self._view.ui.list_songs.item(pos)
 
-            # 2. Obtener path
+            # 2. Obtener path y la url del video
             path = box_item.data(32)
 
             item = self._view.ui.list_songs.itemWidget(box_item)
@@ -82,9 +89,15 @@ class Controller:
 
             # 3. Reproducir cancion 
             if ".mp4" in video_url:
-                self._view.play_and_stop_video(video_url)
+                self._view.play_and_stop_video(video_url, pos, item)
+                
             else:
-                self._view.play_and_stop_song(path)
+                self._view.play_and_stop_song(path, pos, item)
+                
+
+            
+            
+            
     
     def play_next_song(self):
 
@@ -115,13 +128,16 @@ class Controller:
             self._view.video_on = False # el video esta apagado
             self._view.music_player.stop()# se para el reproductor
             self._view.on = False # la musica esta apagada
-               
+            self._view.clean_label_song_on()# Borro la label de la cancion 
+        
             # 3. Reproducir cancion 
             if ".mp4" in video_url:
-                self._view.play_and_stop_video(video_url)
+                self._view.play_and_stop_video(video_url,pos_next, item)
             else:
                 
-                self._view.play_and_stop_song(path)
+                self._view.play_and_stop_song(path, pos_next, item)
+        
+
     
 
     def play_previous_song(self):
@@ -154,11 +170,13 @@ class Controller:
                
             # 3. Reproducir cancion 
             if ".mp4" in video_url:
-                self._view.play_and_stop_video(video_url)
+                self._view.play_and_stop_video(video_url, pos_prev, item)
             else:
                 
-                self._view.play_and_stop_song(path)
+                self._view.play_and_stop_song(path, pos_prev, item)
     
+
+
 
     def _connect_signals(self):
         """
@@ -184,9 +202,9 @@ class Controller:
         self._view.ui.btn_play.clicked.connect(self.play_song)
         self._view.ui.btn_next.clicked.connect(self.play_next_song)
         self._view.ui.btn_previus.clicked.connect(self.play_previous_song)
-
         self._view.ui.btn_video.clicked.connect(self._view.get_path_mp4)
         self._view.ui.horizontalSlider.valueChanged.connect(self._view.update_volume)
+        self._view.ui.btn_save.clicked.connect(self.save)
 
 
         

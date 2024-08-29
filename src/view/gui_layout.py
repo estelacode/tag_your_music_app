@@ -122,6 +122,7 @@ class App_MainWindow(object):
         self.btn_min.setIcon(icon)
         self.btn_min.setIconSize(QtCore.QSize(25, 25))
         self.btn_min.setObjectName("btn_min")
+        self.btn_min.setToolTip("minimize")
         self.qfr_btns_window.addWidget(self.btn_min)
         
          # Btn Normal 
@@ -132,7 +133,8 @@ class App_MainWindow(object):
         icon.addPixmap(QtGui.QPixmap(NORMAL_ICON), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_rest.setIcon(icon)
         self.btn_rest.setIconSize(QtCore.QSize(20, 20))
-        self.btn_rest.setObjectName("btn_min")
+        self.btn_rest.setObjectName("btn_rest")
+        self.btn_rest.setToolTip("restore")
         self.qfr_btns_window.addWidget(self.btn_rest)
         
          # Btn Maximize
@@ -144,6 +146,7 @@ class App_MainWindow(object):
         self.btn_max.setIcon(icon1)
         self.btn_max.setIconSize(QtCore.QSize(20, 20))
         self.btn_max.setObjectName("btn_max")
+        self.btn_max.setToolTip("maximize")
         self.qfr_btns_window.addWidget(self.btn_max)
 
          # Btn Close
@@ -156,6 +159,7 @@ class App_MainWindow(object):
         self.btn_close.setIcon(icon2)
         self.btn_close.setIconSize(QtCore.QSize(20, 20))
         self.btn_close.setObjectName("btn_close")
+        self.btn_close.setToolTip("close")
         self.qfr_btns_window.addWidget(self.btn_close)
         self.verticalLayout_2.addLayout(self.qfr_btns_window)
 
@@ -380,6 +384,7 @@ class App_MainWindow(object):
         self.btn_edit_coverimage.setIcon(icon3)
         self.btn_edit_coverimage.setIconSize(QtCore.QSize(25, 25))
         self.btn_edit_coverimage.setObjectName("btn_edit_coverimage")
+        self.btn_edit_coverimage.setToolTip("editar imagen")
         self.qvb_coverimagen.addWidget(self.btn_edit_coverimage)
         
         spacerItem4 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
@@ -414,13 +419,12 @@ class App_MainWindow(object):
         
         self.metadata_form = QtWidgets.QFormLayout()
 
-        self.metadata_form.setContentsMargins(5, -1, 15, -1)
+        self.metadata_form.setContentsMargins(5, -1, 5, -1)
         self.metadata_form.setHorizontalSpacing(20)
-        self.metadata_form.setVerticalSpacing(10)
+        self.metadata_form.setVerticalSpacing(5)
         self.metadata_form.setObjectName("qfr_metadata_cotent")
 
-        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        self.metadata_form.setItem(0, QtWidgets.QFormLayout.FieldRole, spacerItem5)
+        
 
         # lbl_metadata
         self.lbl_metadata = QtWidgets.QLabel(self.qfr_formLayout_content)
@@ -451,6 +455,10 @@ class App_MainWindow(object):
         self.titleLineEdit = QtWidgets.QLineEdit(self.qfr_formLayout_content)
         self.titleLineEdit.setObjectName("titleLineEdit")
         self.metadata_form.setWidget(2, QtWidgets.QFormLayout.FieldRole, self.titleLineEdit)
+
+        spacerItem5 = QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
+        self.metadata_form.setItem(0, QtWidgets.QFormLayout.FieldRole, spacerItem5)
+
 
         # artist -------------------------------------
         self.artistLabel = QtWidgets.QLabel(self.qfr_formLayout_content)
@@ -536,6 +544,7 @@ class App_MainWindow(object):
         font.setFamily("Calibri")
         font.setPointSize(12)
         self.pathLinkLabel.setFont(font)
+        
         self.pathLinkLabel.setObjectName("pathLinkLineEdit")
         self.metadata_form.setWidget(9, QtWidgets.QFormLayout.LabelRole, self.pathLinkLabel)
 
@@ -553,9 +562,9 @@ class App_MainWindow(object):
         #btn Video
         self.btn_video = QtWidgets.QPushButton(self.qfr_formLayout_content)
         self.btn_video.setStyleSheet("QPushButton{\n"
-                             "border:0px;\n"
+                             "border:1px dotted black;\n"
                              "padding:0px;\n"
-                             "padding-left: 40px;\n"
+                             "padding-left: 0px;\n"
                              "margin:0px;\n"
                              "}\n")
         self.btn_video.setText("")
@@ -564,6 +573,7 @@ class App_MainWindow(object):
         self.btn_video.setIcon(icon5)
         self.btn_video.setIconSize(QtCore.QSize(25, 25))
         self.btn_video.setObjectName("btn_video")
+        self.btn_video.setToolTip("load video")
         self.metadata_form.setWidget(10, QtWidgets.QFormLayout.LabelRole, self.btn_video)
 
         # # video Label 
@@ -610,6 +620,7 @@ class App_MainWindow(object):
         "background-color: #b851ff; color:white;\n"
         "border: none;}")
         self.btn_save.setObjectName("btn_save")
+        self.btn_save.setToolTip("save metadata")
         self.horizontalLayout_8.addWidget(self.btn_save)
 
         # Qframe btn cancel 
@@ -627,6 +638,7 @@ class App_MainWindow(object):
         "background-color: #b851ff; color:white;\n"
         "border: none;}")
         self.btn_cancel.setObjectName("btn_cancel")
+        self.btn_cancel.setToolTip("cancel editing metadata")
         self.horizontalLayout_8.addWidget(self.btn_cancel)
 
         self.verticalLayout_9.addWidget(self.qfr_btn_save_form)
@@ -651,11 +663,48 @@ class App_MainWindow(object):
         self.qfr_footer.setObjectName("qfr_footer")
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.qfr_footer)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+
+        #### TODO 
+        # self.qfr_footer_content_label_song = QtWidgets.QFrame(self.qfr_footer)
+        # self.qfr_footer_content_label_song.setStyleSheet("background-color: rgb(255, 0,0);")
+        # self.qfr_footer_content_label_song.setMinimumSize(QtCore.QSize(0, 0))
+        # self.qfr_footer_content_label_song.setFrameShape(QtWidgets.QFrame.StyledPanel)
+        # self.qfr_footer_content_label_song.setFrameShadow(QtWidgets.QFrame.Raised)
+        # self.qfr_footer_content_label_song.setObjectName("qfr_footer_content_btns_music")
+
+        self.horizontalLayout_15 = QtWidgets.QHBoxLayout()
+        self.horizontalLayout_15.setContentsMargins(20,20, 0, 0)
+        self.horizontalLayout_15.setObjectName("horizontalLayout_15")
+        
+       
+
+        # Qlabel Foteer 1
+        self.lbl_info_song = QtWidgets.QLabel()
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(30)
+        self.lbl_info_song.setFixedWidth(400)
+        self.lbl_info_song.setFont(font)
+        self.lbl_info_song.setScaledContents(False)
+        #self.lbl_info_song.setStyleSheet("border:1px solid black;")
+        self.lbl_info_song.setScaledContents(False)
+        self.lbl_info_song.setAlignment(QtCore.Qt.AlignLeft)
+        self.lbl_info_song.setObjectName("lbl_metadata")
+       
+        self.horizontalLayout_5.addLayout(self.horizontalLayout_15)
+        self.horizontalLayout_15.addWidget(self.lbl_info_song)
+        #### 
+
         self.qfr_footer_content_btns_music = QtWidgets.QFrame(self.qfr_footer)
+        self.qfr_footer_content_btns_music.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.qfr_footer_content_btns_music.setMinimumSize(QtCore.QSize(0, 0))
         self.qfr_footer_content_btns_music.setFrameShape(QtWidgets.QFrame.StyledPanel)
         self.qfr_footer_content_btns_music.setFrameShadow(QtWidgets.QFrame.Raised)
         self.qfr_footer_content_btns_music.setObjectName("qfr_footer_content_btns_music")
+        
+
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.qfr_footer_content_btns_music)
         self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_4.setSpacing(30)
@@ -664,13 +713,16 @@ class App_MainWindow(object):
         self.btn_load_song.setStyleSheet("QPushButton{\n"
 "border:0px;\n"
 "}\n"
-"")
+"")     
+
+
         self.btn_load_song.setText("")
         icon4 = QtGui.QIcon()
         icon4.addPixmap(QtGui.QPixmap(MP3_ICON), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_load_song.setIcon(icon4)
         self.btn_load_song.setIconSize(QtCore.QSize(40, 40))
         self.btn_load_song.setObjectName("btn_load_song")
+        self.btn_load_song.setToolTip("load song")
         self.horizontalLayout_4.addWidget(self.btn_load_song)
 
         ### BTN MICROPHONE
@@ -698,6 +750,7 @@ class App_MainWindow(object):
         self.btn_previus.setIcon(icon6)
         self.btn_previus.setIconSize(QtCore.QSize(12, 12))
         self.btn_previus.setObjectName("btn_previus")
+        self.btn_previus.setToolTip("previous song")
         self.horizontalLayout_4.addWidget(self.btn_previus)
         self.btn_play = QtWidgets.QPushButton(self.qfr_footer_content_btns_music)
         self.btn_play.setStyleSheet("QPushButton{\n"
@@ -710,6 +763,7 @@ class App_MainWindow(object):
         self.btn_play.setIcon(icon7)
         self.btn_play.setIconSize(QtCore.QSize(40, 40))
         self.btn_play.setObjectName("btn_play")
+        self.btn_play.setToolTip("play")
         self.horizontalLayout_4.addWidget(self.btn_play)
         self.btn_next = QtWidgets.QPushButton(self.qfr_footer_content_btns_music)
         self.btn_next.setStyleSheet("QPushButton{\n"
@@ -722,6 +776,7 @@ class App_MainWindow(object):
         self.btn_next.setIcon(icon8)
         self.btn_next.setIconSize(QtCore.QSize(12, 12))
         self.btn_next.setObjectName("btn_next")
+        self.btn_next.setToolTip("next song")
         self.horizontalLayout_4.addWidget(self.btn_next)
         self.btn_volumen = QtWidgets.QPushButton(self.qfr_footer_content_btns_music)
         self.btn_volumen.setStyleSheet("QPushButton{\n"
@@ -734,6 +789,7 @@ class App_MainWindow(object):
         self.btn_volumen.setIcon(icon9)
         self.btn_volumen.setIconSize(QtCore.QSize(25, 25))
         self.btn_volumen.setObjectName("btn_volumen")
+        self.btn_next.setToolTip("volume")
         self.horizontalLayout_4.addWidget(self.btn_volumen)
         self.horizontalSlider = QtWidgets.QSlider(self.qfr_footer_content_btns_music)
         self.horizontalSlider.setStyleSheet("\n"
@@ -753,6 +809,32 @@ class App_MainWindow(object):
 
         self.retranslateUi(App_MainWindow)
         QtCore.QMetaObject.connectSlotsByName(App_MainWindow)
+
+
+        self.horizontalLayout_16 = QtWidgets.QHBoxLayout(self.qfr_footer)
+        self.horizontalLayout_16.setContentsMargins(0,0, 20, 0)
+        self.horizontalLayout_16.setObjectName("horizontalLayout_15")
+
+        # Qlabel Footer 2 
+        self.lbl_info_song_2 = QtWidgets.QLabel(self.qfr_footer)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        font.setBold(True)
+        font.setWeight(30)
+        self.lbl_info_song_2.setFixedWidth(400)
+        self.lbl_info_song_2.setFont(font)
+        self.lbl_info_song_2.setScaledContents(False)
+        #self.lbl_info_song_2.setStyleSheet("border:1px solid black;")
+        self.lbl_info_song_2.setScaledContents(False)
+        self.lbl_info_song_2.setAlignment(QtCore.Qt.AlignLeft)
+        self.lbl_info_song_2.setObjectName("lbl_metadata")
+       
+        self.horizontalLayout_5.addLayout(self.horizontalLayout_16)
+        self.horizontalLayout_16.addWidget(self.lbl_info_song_2)
+        
+
+
 
     def retranslateUi(self, App_MainWindow):
         _translate = QtCore.QCoreApplication.translate

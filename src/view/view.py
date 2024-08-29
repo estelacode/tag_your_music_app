@@ -37,6 +37,8 @@ class View(QMainWindow):
 
         self.volumen = 10 # Valor inicial del volumen (10%)
 
+        self.pos_cancion_actual = -1
+        self.pos_video_actual = -1
 
 
     def minimize_view(self):
@@ -237,7 +239,7 @@ class View(QMainWindow):
         self.ui.list_songs.setItemWidget(box_item, item)
 
 
-    def play_and_stop_song(self, path_mp3):
+    def play_and_stop_song(self, path_mp3, pos, item):
         url = QUrl.fromLocalFile(path_mp3)
         contenido = QMediaContent(url)
         self.music_player.setMedia(contenido)
@@ -251,6 +253,8 @@ class View(QMainWindow):
             icon = QIcon()
             icon.addPixmap(QPixmap(PAUSE_ICON), QIcon.Normal, QIcon.Off)
             self.ui.btn_play.setIcon(icon)
+            self.show_label_song_on(item)
+            self.pos_cancion_actual = pos
         else:
             print("Stop song...")
             self.music_player.stop()
@@ -259,9 +263,13 @@ class View(QMainWindow):
             icon = QIcon()
             icon.addPixmap(QPixmap(PLAY_ICON), QIcon.Normal, QIcon.Off)
             self.ui.btn_play.setIcon(icon)
+            self.clean_label_song_on()
+            self.pos_cancion_actual = -1
 
-    def play_and_stop_video(self,path_mp4):
 
+
+    def play_and_stop_video(self,path_mp4,pos, item):
+        
         print("ruta_video:",path_mp4)
         url = QUrl.fromLocalFile(path_mp4)
         self.video_player.setMedia(QMediaContent(url))
@@ -272,18 +280,26 @@ class View(QMainWindow):
             print("Play video...")
             self.video_player.play()
             self.video_on = True
-            icon = QIcon()
-            icon.addPixmap(QPixmap(PAUSE_ICON), QIcon.Normal, QIcon.Off)
-            self.ui.btn_play.setIcon(icon)
+            self.animate_pause_btn()
+            self.show_label_song_on(item)
+            self.pos_video_actual = pos
         else:
             print("Stop video...")
             self.video_player.stop()
             self.video_on = False
-            #Animar icono play
-            icon = QIcon()
-            icon.addPixmap(QPixmap(PLAY_ICON), QIcon.Normal, QIcon.Off)
-            self.ui.btn_play.setIcon(icon)
+            self.animate_play_btn()
+            self.clean_label_song_on()
+            self.pos_video_actual = -1   
     
+    def animate_pause_btn(self):
+        icon = QIcon()
+        icon.addPixmap(QPixmap(PAUSE_ICON), QIcon.Normal, QIcon.Off)
+        self.ui.btn_play.setIcon(icon)
+    def animate_play_btn(self):
+        icon = QIcon()
+        icon.addPixmap(QPixmap(PLAY_ICON), QIcon.Normal, QIcon.Off)
+        self.ui.btn_play.setIcon(icon)
+
     def update_volume(self):
         self.ui.horizontalSlider.setMinimum(0)
         self.ui.horizontalSlider.setMaximum(100)
@@ -322,11 +338,31 @@ class View(QMainWindow):
             icon = QIcon()
             icon.addPixmap(QPixmap(HIGH_VOLUME_ICON), QIcon.Normal, QIcon.Off)
             self.ui.btn_volumen.setIcon(icon)
-        
+
+    def show_label_song_on(self, item):
+        """
+        Displays the title of the currently playing song on the UI label.
+
+        Args:
+            item: The song item containing the title to be displayed.
+        """
+        self.ui.lbl_info_song.setText("Reproduciendo 🎶💽: " + str(item.lbl_title_qvb.text())) 
+
+    def clean_label_song_on(self):
+        """
+        Clears the text of the `ui.lbl_info_song` label.
+
+        This function sets the text of the `ui.lbl_info_song` label to an empty string, effectively clearing any previous text that was displayed.
+        """
+        self.ui.lbl_info_song.setText("")    
 
     def remove_item(self):
         """
         Removes the currently selected item from the list of songs.
+
+        This function removes the item at the current row of the `ui.list_songs` widget. 
+        If the removed item is the currently playing song, the music player will be stopped. 
+        If the removed item is the currently playing video, the video player will be stopped.
         """
        
         pos = self.ui.list_songs.currentRow()
@@ -334,4 +370,16 @@ class View(QMainWindow):
             print("Calling remove item")
             # Borrar el item de la lista de pyq5
             box_item = self.ui.list_songs.takeItem(pos)
-            self.ui.list_songs.removeItemWidget(box_item)   
+            self.ui.list_songs.removeItemWidget(box_item)
+        # Si borras la cancion que esta sonando se para el reproductor.
+        if self.pos_cancion_actual == pos:
+            self.music_player.stop()
+            self.pos_cancion_actual = -1
+            self.clean_label_song_on()
+            self.animate_play_btn()
+        # Si borras la cancion del video que esta sonando se para el reproductor de video.
+        if self.pos_video_actual == pos:
+            self.video_player.stop()
+            self.pos_video_actual = -1
+            self.clean_label_song_on()
+            self.animate_play_btn()
