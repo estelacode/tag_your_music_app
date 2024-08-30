@@ -298,7 +298,6 @@ class App_MainWindow(object):
 
 
         self.list_songs = QtWidgets.QListWidget(self.qfr_body_middle_content)
-        #self.list_songs.hide()# TODO componente list songs oculto 
         self.list_songs.setMinimumSize(QtCore.QSize(0, 0))
         self.list_songs.setMaximumSize(QtCore.QSize(16777215, 300))
         self.list_songs.setSizeIncrement(QtCore.QSize(0, 0))

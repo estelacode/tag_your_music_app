@@ -5,15 +5,17 @@ from src.view.config import DEFAULT_MUSIC_DIR,DEFAULT_VIDEO_DIR, PLAY_ICON, PAUS
 from src.utils.song import Song
 from PyQt5.QtWidgets import  QFileDialog ,QListWidgetItem
 from PyQt5.QtWidgets import QMainWindow
-from PyQt5.QtCore import Qt, QByteArray, QBuffer, QIODevice, QUrl
+from PyQt5.QtCore import Qt, QByteArray, QBuffer, QIODevice, QUrl,pyqtSignal
 from PyQt5.QtGui import QPixmap, QColor, QIcon
 from PyQt5.QtMultimedia import QMediaPlayer, QMediaContent
+
 import logging
 
 logger = logging.getLogger(__name__)
 
 class View(QMainWindow):
-
+    itemRemoved = pyqtSignal(int) #int es la posicion del elemento de la lista a borrar
+      
     def __init__(self):
         super().__init__()
         # Se instancia un objeto con todos los componentes y layouts de la UI
@@ -203,7 +205,7 @@ class View(QMainWindow):
         return Song(new_title, new_artist, new_album, new_genre,new_release_date, new_time,new_track, new_coverImage,path, video_url)
 
 
-    def add_song(self,updated_song:Song):    
+    def add_song(self,updated_song:Song, id):    
         """
         Display a song item in the custom list widget.
 
@@ -223,10 +225,10 @@ class View(QMainWindow):
         item.setGenre(updated_song.genre)
         item.setDuration(updated_song.duration)
         item.setVideoUrl(updated_song.video_url) # añadir ruta video mp4 (no se guarda en metadatos del mp3)
+        item.setIdSong(id)
         item.btn_close_song.clicked.connect(self.remove_item)
       
         # Create QListWidgetItem (Elemento de la lista que contiene el elemento custom)
-        #box_item = QListWidgetItem(self.ui.list_songs)
         box_item = QListWidgetItem()
         # Añadir la ruta de la cancion seleccionada de forma independiente.
         box_item.setData(32, updated_song.path)
@@ -292,15 +294,34 @@ class View(QMainWindow):
             self.pos_video_actual = -1   
     
     def animate_pause_btn(self):
+        """
+        Animates the pause button by setting the icon to a pixmap of the pause icon.
+
+        This function creates an instance of QIcon and sets its pixmap to the pause icon using QPixmap. The icon is then set as the icon for the 'btn_play' button in the user interface.
+        """
         icon = QIcon()
         icon.addPixmap(QPixmap(PAUSE_ICON), QIcon.Normal, QIcon.Off)
         self.ui.btn_play.setIcon(icon)
+        
     def animate_play_btn(self):
+        """
+        Animates the play button by setting the icon to a pixmap of the play icon.
+
+        This function creates an instance of QIcon and sets its pixmap to the play icon using QPixmap. 
+        The icon is then set as the icon for the 'btn_play' button in the user interface.
+        """
         icon = QIcon()
         icon.addPixmap(QPixmap(PLAY_ICON), QIcon.Normal, QIcon.Off)
         self.ui.btn_play.setIcon(icon)
 
     def update_volume(self):
+        """
+        Updates the volume of the media players and animates the volume icon accordingly.
+
+        Sets the minimum and maximum values of the horizontal slider to 0 and 100, respectively.
+        Retrieves the current volume value from the slider and updates the volume of the video and music players if they are on.
+        Animates the volume icon based on the current volume value, displaying mute, low, mid, or high volume icons.
+        """
         self.ui.horizontalSlider.setMinimum(0)
         self.ui.horizontalSlider.setMaximum(100)
 
@@ -367,16 +388,16 @@ class View(QMainWindow):
        
         pos = self.ui.list_songs.currentRow()
         if pos >= 0:
-            print("Calling remove item")
-            # Borrar el item de la lista de pyq5
-            box_item = self.ui.list_songs.takeItem(pos)
-            self.ui.list_songs.removeItemWidget(box_item)
+            # Emite la posicion de la lista a eliminar
+            self.itemRemoved.emit(pos)
+ 
         # Si borras la cancion que esta sonando se para el reproductor.
         if self.pos_cancion_actual == pos:
             self.music_player.stop()
             self.pos_cancion_actual = -1
             self.clean_label_song_on()
             self.animate_play_btn()
+            
         # Si borras la cancion del video que esta sonando se para el reproductor de video.
         if self.pos_video_actual == pos:
             self.video_player.stop()

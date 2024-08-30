@@ -52,11 +52,12 @@ class Controller:
         #4. Ocultar componente formulario en la vista.
         self._view.hide_form_component()
 
-        #5. Añadir cancion con los metadatos ya actualizados al la lista de canciones.
-        self._view.add_song(updated_song)
+        #5. Anadir la cancion a la base de datos
+        id = self._model.create_song(updated_song)
+        logger.debug("Se ha creado una cancion con el id:",id)
 
-        #6. Anadir la cancion a la base de datos
-        self._model.create_song(updated_song)
+        #6. Añadir cancion con los metadatos ya actualizados al la lista de canciones.
+        self._view.add_song(updated_song, id)
 
         
 
@@ -176,7 +177,29 @@ class Controller:
                 self._view.play_and_stop_song(path, pos_prev, item)
     
 
+    def remove_item_db(self, pos):
+        """
+    	Removes an item from the database and the view's list of songs.
 
+    	Parameters:
+    		pos (int): The position of the item to be removed.
+    	"""
+
+        # Obtener el elemento de la posicion pos
+        box_item = self._view.ui.list_songs.item(pos)
+     
+        # Obtener el item de este box item
+        item = self._view.ui.list_songs.itemWidget(box_item)
+
+        # Obtener el id de este item
+        id = item.id
+        logger.debug("Se va a eliminar de la base de datos el elemento con id:",id)
+        # Eliminar el elmento de la base de datos
+        self._model.delete_song(id)
+        
+        # Elimina el item de la posicion pos en la lista de items de la vista
+        self._view.ui.list_songs.takeItem(pos)
+        
 
     def _connect_signals(self):
         """
@@ -204,7 +227,6 @@ class Controller:
         self._view.ui.btn_previus.clicked.connect(self.play_previous_song)
         self._view.ui.btn_video.clicked.connect(self._view.get_path_mp4)
         self._view.ui.horizontalSlider.valueChanged.connect(self._view.update_volume)
-        self._view.ui.btn_save.clicked.connect(self.save)
-
+        self._view.itemRemoved.connect(self.remove_item_db)
 
         

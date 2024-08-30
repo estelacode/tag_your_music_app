@@ -45,15 +45,18 @@ class Model:
         path= song.path
         video_url = song.video_url
 
-        self.cur.execute(f"""INSERT INTO Songs("title, artist, album, genre, release_date,duration, track_num, coverImage, path, video_url) 
-                         VALUES({title}, {artist}, {album},{genre}, {release_date},{duration}, {track_num}, {coverImage}, {path}, {video_url})""")
 
+        self.cur.execute(f"""INSERT INTO Songs(title, artist, album, genre, release_date, duration, track_num, coverImage, path, video_url)VALUES(?,?,?,?,?,?,?,?,?,?)""", (title, artist, album, genre, release_date, duration, track_num, coverImage, path, video_url))
+        id = self.cur.lastrowid
+        self.con.commit()
+        return id
 
     def delete_song(self,id):
-        self.cur.execute(f"""DELETE FROM Song WHERE id={id}""")
+        self.cur.execute(f"""DELETE FROM Songs WHERE id={id}""")
+        self.con.commit()
 
     def get_all_songs(self):
-        self.cur.execute("""SELECT * FROM Canciones""")
+        self.cur.execute("""SELECT * FROM""")
 
 
     def get_metadata(self, path)->Song:

@@ -2,7 +2,7 @@
 from ctypes import alignment
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import  pyqtSignal
-from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QMenu
+from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QMenu,QListWidgetItem
 from PyQt5.QtGui import QPixmap,QIcon
 from src.view.config import COVER_IMG_DEFAULT,DELETE_SONG_ICON, CLOSE_SONG_ICON
 
@@ -12,6 +12,7 @@ class QCustomQWidget(QWidget):
     """
     clicked =  pyqtSignal(int)
       
+
     def __init__ (self, parent = None):
         super(QCustomQWidget, self).__init__(parent)
     
@@ -111,16 +112,7 @@ class QCustomQWidget(QWidget):
 
     def getMenuButton(self):
         return self.btn_close_song 
-    
-    # def crear_menu(self, action_eliminate):
-    #     menu = QMenu()
-    #     #menu.setStyleSheet("background-color: #b851ff; color:white; QMenu:Hover:{background-color: #f0f0f0; color:black}")
-    #     #menu.setStyleSheet("background-color: #f0f0f0; color:white; QMenu:Hover:{background-color: #f0f0f0; color:b851ff !important;}")
-    #     #menu.addAction("Añadir a playlist 🎶", action_add_to_playlist)
-    #     #menu.addAction("Editar metadatos 💽", action_edit)
-    #     menu.addAction("Quitar ✖️",action_eliminate)
-    #     return menu
-
+  
      
     def open_menu(self):
         self.btn_close_song().exec_(self.btn_close_song .mapToGlobal(self.btn_close_song.rect().bottomLeft()))
@@ -171,7 +163,14 @@ class QCustomQWidget(QWidget):
     def setVideoUrl(self, video_url):
         self.video_url = video_url
 
+    def setIdSong(self, id):
+        self.id = id
+
+
     def getVideoUrl(self):
         return self.video_url
+    
+    def getIdSong(self):
+        return self.id
 
-        
+ 
