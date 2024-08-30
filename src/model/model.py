@@ -13,7 +13,7 @@ class Model:
     def __init__(self):
     
         # Crear conexion a la base de datos. 
-        self.con = sqlite3.connect('tagyourmusic.db')
+        self.con = sqlite3.connect('data/tagyourmusic.db')
         self.cur = self.con.cursor()
         self.create_table()
 
@@ -52,7 +52,7 @@ class Model:
         return id
 
     def delete_song(self,id):
-        self.cur.execute(f"""DELETE FROM Songs WHERE id={id}""")
+        self.cur.execute("DELETE FROM Songs WHERE id = ?", (id,))
         self.con.commit()
 
     def get_all_songs(self):
@@ -134,7 +134,7 @@ class Model:
 
        
         # Crear objeto song con dichas variables.
-        return Song(-1,title, artist, album, genre,release_date, duration,track_num, coverImage,path, video_url)
+        return Song(-1,title, artist, album, genre,release_date, duration, str(track_num), coverImage,path, video_url)
 
     def update_metadata(self, new_song:Song):
         # carga el fichero mp3

@@ -663,13 +663,6 @@ class App_MainWindow(object):
         self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.qfr_footer)
         self.horizontalLayout_5.setObjectName("horizontalLayout_5")
 
-        #### TODO 
-        # self.qfr_footer_content_label_song = QtWidgets.QFrame(self.qfr_footer)
-        # self.qfr_footer_content_label_song.setStyleSheet("background-color: rgb(255, 0,0);")
-        # self.qfr_footer_content_label_song.setMinimumSize(QtCore.QSize(0, 0))
-        # self.qfr_footer_content_label_song.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        # self.qfr_footer_content_label_song.setFrameShadow(QtWidgets.QFrame.Raised)
-        # self.qfr_footer_content_label_song.setObjectName("qfr_footer_content_btns_music")
 
         self.horizontalLayout_15 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_15.setContentsMargins(20,20, 0, 0)
@@ -696,6 +689,7 @@ class App_MainWindow(object):
         self.horizontalLayout_15.addWidget(self.lbl_info_song)
         #### 
 
+   
         self.qfr_footer_content_btns_music = QtWidgets.QFrame(self.qfr_footer)
         self.qfr_footer_content_btns_music.setStyleSheet("background-color: rgb(255, 255, 255);")
         self.qfr_footer_content_btns_music.setMinimumSize(QtCore.QSize(0, 0))
@@ -810,7 +804,7 @@ class App_MainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(App_MainWindow)
 
 
-        self.horizontalLayout_16 = QtWidgets.QHBoxLayout(self.qfr_footer)
+        self.horizontalLayout_16 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_16.setContentsMargins(0,0, 20, 0)
         self.horizontalLayout_16.setObjectName("horizontalLayout_15")
 

@@ -58,7 +58,7 @@ class Controller:
         logger.debug(f"Se ha creado una cancion con el id: {id}")
         # Añadir el id al objeto song recuperado en el formulario
         updated_song.id = id
-        print("updated song:", updated_song)
+        logger.debug(f"updated song:{updated_song}")
 
         #6. Añadir cancion con los metadatos ya actualizados al la lista de canciones.
         self._view.add_song(updated_song)
@@ -235,4 +235,5 @@ class Controller:
 
         # va a pintar en la vista la lista de canciones
         for song in songs:
+            print("song")
             self._view.add_song(song)
