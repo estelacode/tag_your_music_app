@@ -202,10 +202,10 @@ class View(QMainWindow):
         assert ok
         new_coverImage = ba.data()
 
-        return Song(new_title, new_artist, new_album, new_genre,new_release_date, new_time,new_track, new_coverImage,path, video_url)
+        return Song(-1,new_title, new_artist, new_album, new_genre,new_release_date, new_time,new_track, new_coverImage,path, video_url)
 
 
-    def add_song(self,updated_song:Song, id):    
+    def add_song(self,updated_song:Song):    
         """
         Display a song item in the custom list widget.
 
@@ -225,7 +225,7 @@ class View(QMainWindow):
         item.setGenre(updated_song.genre)
         item.setDuration(updated_song.duration)
         item.setVideoUrl(updated_song.video_url) # añadir ruta video mp4 (no se guarda en metadatos del mp3)
-        item.setIdSong(id)
+        item.setIdSong(updated_song.id)
         item.btn_close_song.clicked.connect(self.remove_item)
       
         # Create QListWidgetItem (Elemento de la lista que contiene el elemento custom)
@@ -397,7 +397,7 @@ class View(QMainWindow):
             self.pos_cancion_actual = -1
             self.clean_label_song_on()
             self.animate_play_btn()
-            
+
         # Si borras la cancion del video que esta sonando se para el reproductor de video.
         if self.pos_video_actual == pos:
             self.video_player.stop()

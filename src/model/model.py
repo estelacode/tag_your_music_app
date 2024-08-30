@@ -56,7 +56,26 @@ class Model:
         self.con.commit()
 
     def get_all_songs(self):
-        self.cur.execute("""SELECT * FROM""")
+        self.cur.execute("""SELECT * FROM Songs""")
+        result_query= self.cur.fetchall()
+        song_list = []
+
+        for song in result_query:
+            song_obj = Song(
+                id=song[0],
+                title=song[1],
+                artist=song[2],
+                album=song[3],
+                genre=song[4],
+                release_date=song[5],
+                duration=song[6],
+                track_num=song[7],
+                coverImage=song[8],
+                path=song[9],
+                video_url=song[10]
+            )
+            song_list.append(song_obj)
+        return song_list
 
 
     def get_metadata(self, path)->Song:
@@ -115,7 +134,7 @@ class Model:
 
        
         # Crear objeto song con dichas variables.
-        return Song(title, artist, album, genre,release_date, duration,track_num, coverImage,path, video_url)
+        return Song(-1,title, artist, album, genre,release_date, duration,track_num, coverImage,path, video_url)
 
     def update_metadata(self, new_song:Song):
         # carga el fichero mp3

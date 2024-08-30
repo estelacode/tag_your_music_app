@@ -2,7 +2,8 @@
 
 class Song:
     
-    def __init__(self, title, artist, album, genre, release_date, duration,track_num, coverImage,path,video_url):
+    def __init__(self,id, title, artist, album, genre, release_date, duration,track_num, coverImage,path,video_url):
+        self.id = id,
         self.title = title
         self.artist = artist
         self.album = album

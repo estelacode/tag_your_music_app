@@ -13,6 +13,7 @@ class Controller:
         # Atributo privado model que contiene una referencia al modelo instanciado en el fichero main.py
         self._model = model
         self._connect_signals()
+        self._load_db()
 
     def load_song(self):
         """
@@ -54,10 +55,13 @@ class Controller:
 
         #5. Anadir la cancion a la base de datos
         id = self._model.create_song(updated_song)
-        logger.debug("Se ha creado una cancion con el id:",id)
+        logger.debug(f"Se ha creado una cancion con el id: {id}")
+        # Añadir el id al objeto song recuperado en el formulario
+        updated_song.id = id
+        print("updated song:", updated_song)
 
         #6. Añadir cancion con los metadatos ya actualizados al la lista de canciones.
-        self._view.add_song(updated_song, id)
+        self._view.add_song(updated_song)
 
         
 
@@ -95,10 +99,6 @@ class Controller:
             else:
                 self._view.play_and_stop_song(path, pos, item)
                 
-
-            
-            
-            
     
     def play_next_song(self):
 
@@ -193,7 +193,7 @@ class Controller:
 
         # Obtener el id de este item
         id = item.id
-        logger.debug("Se va a eliminar de la base de datos el elemento con id:",id)
+        logger.debug(f"Se va a eliminar de la base de datos el elemento con id:{id}")
         # Eliminar el elmento de la base de datos
         self._model.delete_song(id)
         
@@ -229,4 +229,10 @@ class Controller:
         self._view.ui.horizontalSlider.valueChanged.connect(self._view.update_volume)
         self._view.itemRemoved.connect(self.remove_item_db)
 
-        
+    def _load_db(self):
+        # hacer la query a la base de datos para recuperar todas las canciones
+        songs = self._model.get_all_songs()
+
+        # va a pintar en la vista la lista de canciones
+        for song in songs:
+            self._view.add_song(song)
