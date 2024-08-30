@@ -143,7 +143,7 @@ class View(QMainWindow):
         self.ui.genreLineEdit.setText(song.genre)
         self.ui.yearLineEdit.setText(song.release_date)
         self.ui.timeLineEdit.setText(song.duration)
-        self.ui.trackLineEdit.setText(song.track_num)
+        self.ui.trackLineEdit.setText(str(song.track_num))
         self.ui.videoLinkLineEdit.setText(song.video_url)
         self.ui.pathLinkLineEdit.setText(song.path) 
 

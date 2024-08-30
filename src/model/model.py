@@ -134,7 +134,7 @@ class Model:
 
        
         # Crear objeto song con dichas variables.
-        return Song(-1,title, artist, album, genre,release_date, duration, str(track_num), coverImage,path, video_url)
+        return Song(-1,title, artist, album, genre,release_date, duration, track_num, coverImage,path, video_url)
 
     def update_metadata(self, new_song:Song):
         # carga el fichero mp3
@@ -149,7 +149,7 @@ class Model:
         audiofile.tag.images.set(3, new_song.coverImage , "image/jpg" ,u"Cover") #le asigna nueva cover
         audiofile.tag.genre = new_song.genre #le asigna nuevo genero
         #audiofile.tag.comments.set(new_song.video_url) # asignar url video youtube
-        if new_song.track_num: 
+        if new_song.track_num != None and new_song.track_num != "": 
             audiofile.tag.track_num = new_song.track_num
             
         # update del fichero mp3
