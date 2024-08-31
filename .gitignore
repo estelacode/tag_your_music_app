@@ -8,3 +8,4 @@ app_log
 todo_songModel.py
 data/*.db
 .vscode
+tag_your_music_app.egg-info
