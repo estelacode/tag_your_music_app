@@ -1,8 +1,8 @@
 __pycache__
 .venv
 docs
-src/assets/videos
-src/assets/music
+src/assets/videos/*.mp4
+src/assets/music/*.mp3
 src/assets/images/*.jpg
 app_log
 todo_songModel.py
