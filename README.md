@@ -1,4 +1,6 @@
 
+
+
 # 🎶 Tag Your Music App
 ![Demo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/images/ux.png)
 
@@ -19,11 +21,12 @@
 * MVC pattern
 * Object oriented design and UML
 * Event driven
-* SQLlite database 
+* SQLlite database  ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
 * Metadata library: eyed3
 * aplications logs
 * environtment creation
 * package app
+* ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 
 ### ⚙️ Install 
 ```bash
