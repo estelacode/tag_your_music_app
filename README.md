@@ -2,6 +2,9 @@
 
 
 # 🎶 Tag Your Music App
+Diseño e Implementación de una Aplicación de Escritorio  con el framework Pyqt5 y Python que permita a los usuarios personalizar y organizar su música con una UI inspirada en Spotify.
+![image](https://github.com/user-attachments/assets/2827da9c-c08e-4019-9dfd-2e3557129caf)
+
 
 ![Demo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/images/ux.png)
 
