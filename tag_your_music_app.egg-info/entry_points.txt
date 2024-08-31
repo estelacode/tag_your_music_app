@@ -1,0 +1,2 @@
+[console_scripts]
+tag_your_music_app = src.__main__:main
