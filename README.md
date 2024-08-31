@@ -21,7 +21,7 @@
 * MVC pattern
 * Object oriented design and UML
 * Event driven
-* SQLlite database  ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+* ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
 * Metadata library: eyed3
 * aplications logs
 * environtment creation
