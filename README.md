@@ -4,6 +4,7 @@
 # 🎶 Tag Your Music App
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54) ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white) ![Medium](https://img.shields.io/badge/Medium-12100E?style=for-the-badge&logo=medium&logoColor=white)
 
+### 💡 App Design
 ![Demo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/images/ux.png)
 
 ### 🚀 Usage
