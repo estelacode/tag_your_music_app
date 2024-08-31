@@ -3,8 +3,6 @@
 
 # 🎶 Tag Your Music App
 
-
-### 💡 App Design
 ![Demo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/images/ux.png)
 
 ### 🚀 Usage
