@@ -1,3 +1,7 @@
+# Autor: Estela Madariaga
+# Fecha de creación: 2022
+
+
 import logging
 from src.utils.song import Song
 from src.view.view import View

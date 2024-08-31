@@ -1,3 +1,7 @@
+# Autor: Estela Madariaga
+# Fecha de creación: 2022
+
+# Externalizacion de variables de la GUI.
 VIEW_WITDH = 1500
 VIEW_HEIGHT = 900
 APP_MAIN_WIN_WITDH = 1316

@@ -1,10 +1,12 @@
+# Autor: Estela Madariaga
+# Fecha de creación: 2022
 
-from ctypes import alignment
+
 from PyQt5 import QtCore, QtGui
 from PyQt5.QtCore import  pyqtSignal
-from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QWidget, QMenu,QListWidgetItem
+from PyQt5.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout, QPushButton, QWidget
 from PyQt5.QtGui import QPixmap,QIcon
-from src.view.config import COVER_IMG_DEFAULT,DELETE_SONG_ICON, CLOSE_SONG_ICON
+from src.view.config import COVER_IMG_DEFAULT,CLOSE_SONG_ICON
 
 class QCustomQWidget(QWidget):
     """  Class QCustomQWidget

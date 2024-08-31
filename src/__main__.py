@@ -1,7 +1,9 @@
+# Autor: Estela Madariaga
+# Fecha de creación: 2022
+
+
 import sys
 from PyQt5.QtWidgets import QApplication
-#from view.view import View
-#from model.model import Model
 from src.view.view import View
 from src.model.model import Model
 from src.controller.controller import Controller

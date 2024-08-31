@@ -1,4 +1,5 @@
-
+# Autor: Estela Madariaga
+# Fecha de creación: 2022
 
 class Song:
     

@@ -1,3 +1,7 @@
+# Autor: Estela Madariaga
+# Fecha de creación: 2022
+
+
 
 from src.view.gui_layout import App_MainWindow
 from src.view.gui_custom_widget import QCustomQWidget

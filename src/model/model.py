@@ -1,3 +1,7 @@
+# Autor: Estela Madariaga
+# Fecha de creación: 2022
+
+
 
 import eyed3
 from time import gmtime

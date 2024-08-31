@@ -1,3 +1,7 @@
+# Autor: Estela Madariaga
+# Fecha de creación: 2022
+
+
 from setuptools import setup
 
 
