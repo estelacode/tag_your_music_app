@@ -27,12 +27,12 @@
 
 ### ⚙️ Install 
 ```bash
- tag_your_music_v2$ pip install -e . 
+ tag_your_music_app$ pip install -e . 
 ```
 Nota: Se debe instalar el programa K-lite-code version Standar para reproducir los mp3 y mp4 en pyQt5
 ### 😎🎮 Play 
 ```bash
-tag_your_music_v2$ tag_your_music_v2
+tag_your_music_app$ tag_your_music_app
 ```
 
 ### 👋 Author
