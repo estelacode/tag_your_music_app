@@ -8,7 +8,7 @@ Guarda la play list de mp3 editados en un base de datos local para reproducir lo
 <!--[![DemoVideo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/raw/master/src/assets/tag_your_music_demo.mp4)](https://github.com/estelacode/tag_your_music_app/raw/master/src/assets/tag_your_music_demo.mp4)-->
 
 <video width="100%" height="100%" controls>  
-<source src= "https://github.com/estelacode/tag_your_music_app/raw/master/src/assets/tag_your_music_demo.mp4" type="video/mp4">
+<source src= "https://github.com/estelacode/tag_your_music_app/blob/raw/master/src/assets/tag_your_music_demo.mp4" type="video/mp4">
 Tu navegador no admite la reproducción de video.
 </video>
 
