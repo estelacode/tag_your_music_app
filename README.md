@@ -5,7 +5,7 @@
 Diseño e Implementación de una Aplicación de Escritorio  con el framework Pyqt5 y Python que permita a los usuarios editar los metadatos de los ficheros locales mp3 y reproducir las canciones y videos.
 Guarda la play list de mp3 editados en un base de datos local para reproducir los ficheros mp3 editatos y los ficheros mp4 de los  directorios de musica y videos .
 
-[![DemoVideo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/tag_your_music_demo.mp4)](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/tag_your_music_demo.mp4)
+[![DemoVideo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/raw/master/src/assets/tag_your_music_demo.mp4)](https://github.com/estelacode/tag_your_music_app/raw/master/src/assets/tag_your_music_demo.mp4)
 
 <!--<video width="100%" height="100%" controls>  
 <source src= "https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/tag_your_music_demo.mp4" type="video/mp4">
