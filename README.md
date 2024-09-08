@@ -6,8 +6,14 @@ Diseño e Implementación de una Aplicación de Escritorio  con el framework Pyq
 Guarda la play list de mp3 editados en un base de datos local para reproducir los ficheros mp3 editatos y los ficheros mp4 de los  directorios de musica y videos .
 
 
-![Demo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/images/ux.png)
+Demo:
+![Demo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/portada_tag_your_music_app.jpg)
 Youtube Video: https://www.youtube.com/watch?v=4xr8uNtJWHA
+
+Prototype: 
+![Prototype - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/images/ux.png)
+
+
 
 ### 🚀 Usage
 * El usuario puede cargar ficheros mp3 para editar los metadatos
