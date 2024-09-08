@@ -19,6 +19,7 @@ Youtube Video: https://www.youtube.com/watch?v=4xr8uNtJWHA
 * El usuario puede eliminar canciones de la lista
 * El usuario guarda las canciones en una tabla de la base de datos.
 * El usuario puede maximinar, minimizar, restaurar y cerrar la ventana de la aplicación.
+* El usuario persiste las modificaciones el local.
 
 ### Tech Stack
 * Pyqt5 framework
@@ -26,6 +27,7 @@ Youtube Video: https://www.youtube.com/watch?v=4xr8uNtJWHA
 * Object oriented design and UML
 * Event driven
 * Sql
+* Sqlite3
 * Metadata library: eyed3
 * aplications logs
 * environtment creation
