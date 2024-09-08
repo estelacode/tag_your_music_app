@@ -8,7 +8,7 @@ Guarda la play list de mp3 editados en un base de datos local para reproducir lo
 
 ## Demo
 
-![Demo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/portada_tag_your_music_app.jpg)
+[![Demo - Tag Your Music](https://github.com/estelacode/tag_your_music_app/blob/master/src/assets/portada_tag_your_music_app.jpg)](https://www.youtube.com/watch?v=4xr8uNtJWHA)
 
 Youtube Video: https://www.youtube.com/watch?v=4xr8uNtJWHA
 
